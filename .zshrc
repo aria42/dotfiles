@@ -61,8 +61,8 @@ skill () {
     kill -9 `ps ax | grep $1 | grep -v grep | awk '{print $1}'`
 }
 
-rmfis () {
-    find . -name \$1 -exec rm -rf {} \;
+fis () {
+    find . -type f -name $1
 }
 
 # evals
