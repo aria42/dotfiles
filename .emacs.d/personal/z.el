@@ -66,7 +66,6 @@
 
 ;; modeline
 (require 'modeline-posn)
-(column-number-mode 1)
 (setq modelinepos-column-limit 80)
 (size-indication-mode 1)
 
