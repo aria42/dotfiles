@@ -60,9 +60,15 @@
 
 ;; whitespace
 (require 'whitespace)
- (setq whitespace-line-column 120)
- (setq whitespace-style '(face empty tabs lines-tail trailing))
- (global-whitespace-mode t)
+(setq whitespace-line-column 120)
+(setq whitespace-style '(face tabs empty lines-tail trailing))
+(global-whitespace-mode t)
+
+;; modeline
+(require 'modeline-posn)
+(column-number-mode 1)
+(setq modelinepos-column-limit 80)
+(size-indication-mode 1)
 
 ;; other file loaders
 (add-to-list 'load-path "~/.emacs.d/personal/files")
