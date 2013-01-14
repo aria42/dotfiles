@@ -69,8 +69,6 @@
 (add-to-list 'ac-sources 'ac-source-yasnippet)
 (global-set-key (kbd "C-x C-y") 'yas-insert-snippet)
 
-;; b/c of autocomplete/yas-snippet issues
-
 ;; whitespace
 (require 'whitespace)
 (setq whitespace-line-column 120)
