@@ -1,27 +1,21 @@
 ;; no tabs, normally
+(setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
+(setq indent-line-function 'insert-tab)
 (setq c-basic-offset 4)
 
-;;;; for java-mode
+;;;; explicit for modes
 (add-hook 'java-mode-hook
           '(lambda ()
              (setq c-basic-offset 4
                    tab-width 4
                    indent-tabs-mode nil)))
 
-;;;;finally
-(setq-default indent-tabs-mode nil)
-
 ;; arrows come back
 (setq prelude-guru nil)
 
 ;; whitespace issues prelude
 (setq prelude-whitespace nil)
-
-;; no hard tabs, use spaces
-(setq-default indent-tabs-mode nil)
-(setq-default tab-width 4)
-(setq indent-line-function 'insert-tab)
 
 ;; Show line-number in the mode line
 (line-number-mode 1)
