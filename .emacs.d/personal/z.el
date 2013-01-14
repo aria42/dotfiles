@@ -1,3 +1,17 @@
+;; no tabs, normally
+(setq-default tab-width 4)
+(setq c-basic-offset 4)
+
+;;;; for java-mode
+(add-hook 'java-mode-hook
+          '(lambda ()
+             (setq c-basic-offset 4
+                   tab-width 4
+                   indent-tabs-mode nil)))
+
+;;;;finally
+(setq-default indent-tabs-mode nil)
+
 ;; arrows come back
 (setq prelude-guru nil)
 
@@ -32,11 +46,13 @@
 
 ;; autocomplete
 (load-file "~/.emacs.d/vendor/autocomplete/auto-complete.el")
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/vendor/autocomplete/dict")
 (require 'auto-complete-config)
-(ac-config-default)
+
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/vendor/autocomplete/dict")
+(setq-default ac-sources (add-to-list 'ac-sources 'ac-source-dictionary))
+(global-auto-complete-mode t)
 (ac-set-trigger-key "TAB")
-(setq ac-auto-start t)
+(setq ac-auto-start 2)
 
 ;; geiser
 (load-file "~/.emacs.d/vendor/geiser/elisp/geiser.el")
@@ -56,13 +72,21 @@
         "~/.emacs.d/vendor/yasnippet/extras/imported"
         ))
 (yas-global-mode 1)
+(add-to-list 'ac-sources 'ac-source-yasnippet)
 (global-set-key (kbd "C-x C-y") 'yas-insert-snippet)
+
+;; b/c of autocomplete/yas-snippet issues
 
 ;; whitespace
 (require 'whitespace)
 (setq whitespace-line-column 120)
-(setq whitespace-style '(face tabs empty lines-tail trailing))
+
+(setq whitespace-style '(face tabs tab-mark lines-tail trailing))
+(set-face-foreground 'whitespace-tab nil)
+(set-face-background 'whitespace-tab nil)
+
 (global-whitespace-mode t)
+(add-hook 'before-save-hook 'whitespace-cleanup)
 
 ;; modeline
 (require 'modeline-posn)
