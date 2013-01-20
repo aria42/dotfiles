@@ -31,14 +31,14 @@ plugins=(git git-flow ruby rbenv autojump coffee lein osx sublime)
 source $ZSH/oh-my-zsh.sh
 
 # exports and sets
-export PATH=/usr/local/bin:/usr/local:/usr/local/sbin:/usr/local/share/python:/Users/zeeshanlakhani/.cabal/bin:/usr/local/Cellar/smlnj/110.75/libexec/bin:/Users/zeeshanlakhani/bin:/Users/zeeshanlakhani/Applications/chromedriver:/usr/bin:/bin:/usr/sbin:/sbin:/~/z/z.sh
+export PATH=/usr/local/bin:/usr/local:/usr/local/sbin:/usr/local/share/python:/Users/zeeshanlakhani/.cabal/bin:/usr/local/Cellar/smlnj/110.75/libexec/bin:/Users/zeeshanlakhani/bin:/Users/zeeshanlakhani/Applications/chromedriver:/usr/bin:/bin:/usr/sbin:/sbin
 export PYTHONPATH="/usr/local/lib/python2.7/site-packages:$PYTHONPATH"
 FC=/usr/local/bin/gfortran
 TERM=xterm-256color
 WORKON_HOME=$HOME/.virtualenvs
+export RLWRAP_HOME="$HOME/.rlwrap"
 
 # extra path exports
-export PATH="$HOME/.rbenv/bin:$PATH"
 export PATH="$HOME/.rbenv/bin:$PATH"
 
 # sources
@@ -55,6 +55,7 @@ alias gfz='git fetch'
 alias gs='git status'
 alias ppj='python -m json.tool'
 alias subl-packages='~/Library/Application\ Support/Sublime\ Text\ 2/Packages'
+alias sml='rlwrap sml'
 
 # functions
 skill () {
@@ -64,6 +65,8 @@ skill () {
 fis () {
     find . -type f -name $1
 }
+
+. `brew --prefix`/etc/profile.d/z.sh
 
 # evals
 eval "$(rbenv init -)"
