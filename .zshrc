@@ -31,7 +31,7 @@ plugins=(git git-flow ruby rbenv autojump coffee lein osx sublime)
 source $ZSH/oh-my-zsh.sh
 
 # exports and sets
-export PATH=/usr/local/bin:/usr/local:/usr/local/sbin:/usr/local/share/python:/Users/zeeshanlakhani/.cabal/bin:/usr/local/Cellar/smlnj/110.75/libexec/bin:/Users/zeeshanlakhani/bin:/Users/zeeshanlakhani/Applications/chromedriver:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin
+export PATH=/usr/local/bin:/usr/local:/usr/local/sbin:/usr/local/share/python:/Users/zeeshanlakhani/.cabal/bin:/usr/local/Cellar/smlnj/110.75/libexec/bin:/Users/zeeshanlakhani/bin:/Users/zeeshanlakhani/Applications/chromedriver:/usr/bin:/bin:/usr/sbin:/sbin:/~/z/z.sh
 export PYTHONPATH="/usr/local/lib/python2.7/site-packages:$PYTHONPATH"
 FC=/usr/local/bin/gfortran
 TERM=xterm-256color
