@@ -56,6 +56,7 @@ alias gs='git status'
 alias ppj='python -m json.tool'
 alias subl-packages='~/Library/Application\ Support/Sublime\ Text\ 2/Packages'
 alias sml='rlwrap sml'
+alias emacst='emacsclient -t'
 
 # functions
 skill () {
