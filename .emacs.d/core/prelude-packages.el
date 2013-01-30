@@ -39,9 +39,6 @@
 (setq package-user-dir (expand-file-name "elpa" prelude-dir))
 (package-initialize)
 
-;; required because of a package.el bug
-(setq url-http-attempt-keepalives nil)
-
 (defvar prelude-packages
   '(ace-jump-mode ack-and-a-half elisp-slime-nav exec-path-from-shell
                   expand-region flycheck gist guru-mode helm helm-projectile
@@ -92,6 +89,7 @@
     ("\\.sass\\'" sass-mode sass-mode)
     ("\\.scala\\'" scala-mode2 scala-mode)
     ("\\.scss\\'" scss-mode scss-mode)
+    ("\\.slim\\'" slim-mode slim-mode)
     ("\\.yml\\'" yaml-mode yaml-mode)))
 
 ;; markdown-mode doesn't have autoloads for the auto-mode-alist

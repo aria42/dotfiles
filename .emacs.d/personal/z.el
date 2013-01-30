@@ -35,13 +35,12 @@
 (global-set-key (kbd "C-l") 'goto-line)
 
 ;; dirtree
-(require 'dirtree)
+(autoload 'dirtree "dirtree" "dirtree" t)
 (global-set-key (kbd "C-x C-z") 'dirtree)
 
 ;; autocomplete
 (load-file "~/.emacs.d/vendor/autocomplete/auto-complete.el")
-(require 'auto-complete-config)
-
+(autoload 'auto-complete-config "auto-complete-config" "autocomplete" t)
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/vendor/autocomplete/dict")
 (setq-default ac-sources (add-to-list 'ac-sources 'ac-source-dictionary))
 (global-auto-complete-mode t)
@@ -55,11 +54,11 @@
 (load-file "~/.emacs.d/vendor/quack.el")
 
 ;; anything
-(require 'anything-config)
+(autoload 'anything-config "anything-config" "anything-config" t)
 (global-set-key (kbd "C-x C-d") 'anything)
 
 ;; yasnippet
-(require 'yasnippet)
+(autoload 'yasnippet "yasnippet" "yasnippet" t)
 (setq yas-snippet-dirs
       '("~/.emacs.d/snippets"
         "~/.emacs.d/personal/snippets"
@@ -70,7 +69,7 @@
 (global-set-key (kbd "C-x C-y") 'yas-insert-snippet)
 
 ;; whitespace
-(require 'whitespace)
+(autoload 'whitespace "whitespace" "whitespace" t)
 (setq whitespace-line-column 120)
 
 (setq whitespace-style '(face tabs tab-mark lines-tail trailing))
@@ -81,15 +80,12 @@
 (add-hook 'before-save-hook 'whitespace-cleanup)
 
 ;; modeline
-(require 'modeline-posn)
+(autoload 'modeline-posn "modeline-posn" "modeline-posn" t)
 (setq modelinepos-column-limit 80)
 (size-indication-mode 1)
 
 ;; other file loaders
 (add-to-list 'load-path "~/.emacs.d/personal/files")
 
-;; compile all the files .elc files which has a corresponding newer .el file
-(byte-recompile-directory "~/.emacs.d/core" "~/.emacs.d/modules")
-;; like before, but in this case force the byte-compilation of an .el file when the corresponding
-;; .elc file doesn't exist
-(byte-recompile-directory "~/.emacs.d/core" "~/.emacs.d/modules" 0)
+;; compile all the files .elc files which has a corresponding newer .el file, if it exists
+(byte-recompile-directory "~/.emacs.d/core" "~/.emacs.d/modules"  0)

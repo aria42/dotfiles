@@ -26,7 +26,7 @@ DEFAULT_USER="zeeshanlakhani"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git git-flow ruby rbenv autojump coffee lein osx sublime)
+plugins=(git git-flow ruby rbenv coffee lein osx sublime)
 
 source $ZSH/oh-my-zsh.sh
 
