@@ -54,7 +54,8 @@
 (load-file "~/.emacs.d/vendor/quack.el")
 
 ;; anything
-(autoload 'anything-config "anything-config" "anything-config" t)
+(require 'anything-config)
+(require 'anything-match-plugin)
 (global-set-key (kbd "C-x C-d") 'anything)
 
 ;; yasnippet

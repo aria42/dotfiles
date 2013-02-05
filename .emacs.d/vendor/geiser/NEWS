@@ -1,11 +1,30 @@
-* Version 0.2.3 ()
+* Version 0.4 ()
+
+  New features:
+
+   - New command geiser-edit-insert-lambda, bound to C-c \ in Scheme
+     buffers (thanks to Ray Racine).
+
+  Bug fixes:
+
+   - Filename completion should also work in emacs 23.2 now.
+
+* Version 0.3 (Jan 19, 2013)
+
+  New features:
 
    - TAB in a string context in the REPL and Scheme buffers triggers
      filename completion.
-   - Indentation of scheme forms improved (specially for those of you
-     using a single implementation).
+   - User manual lookup command (C-c C-d i) available also in the
+     REPL.
    - New REPL command, geiser-repl-clear-buffer (C-c M-o), to remove
-     all scheme output (thanks to jxonas).
+     all scheme output (thanks to Jonas Rodrigues).
+   - Indentation of scheme forms improved..
+
+  Bug fixes:
+
+   - Racket: fixes for problems entering modules sans main.rkt.
+   - Racket: image support in Windows fixed.
 
 * Version 0.2.2 (Sep 30, 2012)
 
@@ -14,14 +33,14 @@
 
 * Version 0.2.1 (Sep 15, 2012)
 
-Bug fixes:
+  Bug fixes:
 
    - Racket: correctly reloading modules that contain submodules (this
      one was breaking for instance code based on plai-typed).
    - Racket: correctly jumping to symbols defined in files with .ss
      extension.
 
-New features:
+  New features:
 
    - Racket: autodoc now displays argument names for constructors
      defined by define-type (from either plai or plai-type).
@@ -30,7 +49,7 @@ New features:
 
 * Version 0.2 (Sep 3, 2012)
 
-New features:
+  New features:
 
    - Support for images in Racket, both in the REPL and during
      evaluations.  Thanks to Michael Wilber for code, discussion and
@@ -40,7 +59,7 @@ New features:
    - New customizable variable, geiser-guile-manual-lookup-nodes, to
      specify the name of Guile's info nodes, if need be.
 
-Bug fixes:
+  Bug fixes:
 
    - We don't deactivate autodoc in the REPL unless requested.
    - Indentation for syntax-id-rules and for/hash.
@@ -51,14 +70,14 @@ Bug fixes:
 
 * Version 0.1.4 (Nov 26, 2011)
 
-New features:
+  New features:
 
    - Indentation for Racket's splicing-let and friends.
    - Customizable prompt waiting time (geiser-repl-startup-time).
    - New customizable faces: geiser-font-lock-repl-prompt and
      geiser-font-lock-repl-input.
 
-Bug fixes:
+  Bug fixes:
 
    - C-c C-r and friends won't send unbalanced sexps to Scheme.
    - C-c C-z works after run-geiser in a Scheme buffer.

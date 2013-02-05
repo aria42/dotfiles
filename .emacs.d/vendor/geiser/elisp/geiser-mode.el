@@ -1,6 +1,6 @@
 ;; geiser-mode.el -- minor mode for scheme buffers
 
-;; Copyright (C) 2009, 2010, 2011, 2012 Jose Antonio Ortega Ruiz
+;; Copyright (C) 2009, 2010, 2011, 2012, 2013 Jose Antonio Ortega Ruiz
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the Modified BSD License. You should
@@ -215,6 +215,14 @@ positive values and backward for negative."
                 (error (setq steps 0))))))
       (when (and pared (fboundp 'paredit-mode)) (paredit-mode 1)))))
 
+(defun geiser-insert-lambda (&optional full)
+  "Insert λ at point.  With prefix, inserts (λ ())."
+  (interactive "P")
+  (if (not full)
+      (insert (make-char 'greek-iso8859-7 107))
+    (insert "(" (make-char 'greek-iso8859-7 107) " ())")
+    (backward-char 2)))
+
 
 ;;; Geiser mode:
 
@@ -308,6 +316,7 @@ interacting with the Geiser REPL is at your disposal.
   ("Edit module" ("\C-c\C-e\C-m" "\C-c\C-em") geiser-edit-module)
   ("Add to load path..." ("\C-c\C-e\C-l" "\C-c\C-el") geiser-add-to-load-path)
   ("Toggle ()/[]" ("\C-c\C-e\C-[" "\C-c\C-e[") geiser-squarify)
+  ("Insert λ" ("\C-c\\" "\C-c\C-\\") geiser-insert-lambda)
   --
   ("Callers" ((kbd "C-c <")) geiser-xref-callers
    :enable (and (geiser-eval--supported-p 'callers)
