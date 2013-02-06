@@ -87,6 +87,7 @@
 
 ;; markdown mode
 (autoload 'markdown-mode "markdown-mode" "Major mode for editing Markdown files" t)
+'(markdown-enable-math t)
 
 ;; other file loaders
 (add-to-list 'load-path "~/.emacs.d/personal/files")
