@@ -85,6 +85,9 @@
 (setq modelinepos-column-limit 80)
 (size-indication-mode 1)
 
+;; markdown mode
+(autoload 'markdown-mode "markdown-mode" "Major mode for editing Markdown files" t)
+
 ;; other file loaders
 (add-to-list 'load-path "~/.emacs.d/personal/files")
 
