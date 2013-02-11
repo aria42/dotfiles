@@ -4,18 +4,14 @@
 (setq indent-line-function 'insert-tab)
 (setq c-basic-offset 4)
 
-;;;; explicit for modes
-(add-hook 'java-mode-hook
-          '(lambda ()
-             (setq c-basic-offset 4
-                   tab-width 4
-                   indent-tabs-mode nil)))
-
 ;; arrows come back
 (setq prelude-guru nil)
 
 ;; whitespace issues prelude
 (setq prelude-whitespace nil)
+
+;; turn off prelude tip of the day
+(setq prelude-tip-of-the-day nil)
 
 ;; Show line-number in the mode line
 (line-number-mode 1)
@@ -33,6 +29,9 @@
 (global-set-key (kbd "C-x <right>") 'windmove-right)
 (global-set-key (kbd "C-x <left>") 'windmove-left)
 (global-set-key (kbd "C-l") 'goto-line)
+
+;; find func
+(global-set-key (kbd "C-h C-f") 'find-function)
 
 ;; dirtree
 (autoload 'dirtree "dirtree" "dirtree" t)
@@ -89,8 +88,17 @@
 (autoload 'markdown-mode "markdown-mode" "Major mode for editing Markdown files" t)
 '(markdown-enable-math t)
 
-;; other file loaders
+;; json-mode
+(load-file "~/.emacs.d/vendor/json-mode/json-mode.el")
+(autoload 'json-mode "json-mode" "Major mode for editing Json files")
+
+;;;; other file loaders
 (add-to-list 'load-path "~/.emacs.d/personal/files")
 
+;; load lang-specific hooks
+(load-file "~/.emacs.d/personal/langs.el")
+
 ;; compile all the files .elc files which has a corresponding newer .el file, if it exists
-(byte-recompile-directory "~/.emacs.d/core" "~/.emacs.d/modules"  0)
+(byte-recompile-directory "~/.emacs.d/core" "~/.emacs.d/modules" 0)
+
+
