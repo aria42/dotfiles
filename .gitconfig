@@ -1,0 +1,33 @@
+[user]
+ email = zeeshan.lakhani@gmail.com
+ name = Zeeshan Lakhani
+[color]
+ diff = auto
+ status = auto
+ branch = auto
+ ui = auto
+ interactive = auto
+ pager = true
+[color "branch"]
+ current = red
+ local = red
+ remote = green
+[color "diff"]
+ meta = yellow bold
+ frag = magenta bold
+ old = red bold
+ new = green bold
+[color "status"]
+ added = yellow
+ changed = green
+ untracked = cyan
+[core]
+ editor = emacs
+ excludesfile = /Users/zeeshanlakhani/.gitignore
+[alias]
+ last = cat-file commit HEAD
+[merge]
+ stat = true
+[github]
+ user = zeeshanlakhani
+ token = 1b8ef57c3366eabe9410876d3ddd0411
