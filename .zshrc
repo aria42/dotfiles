@@ -23,6 +23,9 @@ DEFAULT_USER="zeeshanlakhani"
 # Uncomment following line if you want red dots to be displayed while waiting for completion
 # COMPLETION_WAITING_DOTS="true"
 
+# Disable AutoCorrect
+unsetopt correct_all
+
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
@@ -31,7 +34,7 @@ plugins=(git git-flow ruby rbenv coffee lein osx sublime)
 source $ZSH/oh-my-zsh.sh
 
 # exports and sets
-export PATH=/usr/local/bin:/usr/local:/usr/local/sbin:/usr/local/share/python:~/.cabal/bin:~/julia:/usr/local/Cellar/smlnj/110.75/libexec/bin:~/bin:~/Applications/chromedriver:/usr/bin:/bin:/usr/sbin:/sbin
+export PATH=/usr/local/bin:/usr/local:/usr/local/sbin:/usr/local/share/python:~/.cabal/bin:~/julia:/usr/local/share/npm/bin:/Applications/Racket/bin:/usr/local/Cellar/smlnj/110.75/libexec/bin:~/bin:~/Applications/chromedriver:/usr/bin:/bin:/usr/sbin:/sbin
 export PYTHONPATH="/usr/local/lib/python2.7/site-packages:$PYTHONPATH"
 FC=/usr/local/bin/gfortran
 TERM=xterm-256color
@@ -57,6 +60,7 @@ alias ppj='python -m json.tool'
 alias subl-packages='~/Library/Application\ Support/Sublime\ Text\ 2/Packages'
 alias sml='rlwrap sml'
 alias emacst='emacsclient -t'
+alias spot="osascript ~/SpotifyControl/SpotifyControl.scpt"
 
 # functions
 skill () {

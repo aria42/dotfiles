@@ -20,3 +20,4 @@ savefile/
 # zeeshan changes
 ac-comphist.dat
 flycheck-custom.el
+geiser-history.racket

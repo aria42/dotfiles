@@ -32,3 +32,4 @@
 /autom4te.cache/
 /bin/Makefile.in
 /build/
+*.elc

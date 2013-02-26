@@ -9,3 +9,8 @@
 (add-hook 'json-mode-hook
           '(lambda ()
              (setq js-indent-level 2)))
+
+(add-hook 'python-mode-hook
+          'flymake-python-pyflakes-load
+          '(lambda ()
+             (setq flymake-number-of-errors-to-display nil)))

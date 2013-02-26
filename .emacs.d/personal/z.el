@@ -46,11 +46,10 @@
 (ac-set-trigger-key "TAB")
 (setq ac-auto-start 2)
 
-;; geiser
+;; geiser, ecd, palm for racket/scheme
 (load-file "~/.emacs.d/vendor/geiser/elisp/geiser.el")
-
-;; quack
-(load-file "~/.emacs.d/vendor/quack.el")
+(setq geiser-active-implementations '(racket))
+(setq geiser-repl-history-filename "~/.emacs.d/geiser-history")
 
 ;; anything
 (require 'anything-config)
@@ -100,5 +99,3 @@
 
 ;; compile all the files .elc files which has a corresponding newer .el file, if it exists
 (byte-recompile-directory "~/.emacs.d/core" "~/.emacs.d/modules" 0)
-
-
