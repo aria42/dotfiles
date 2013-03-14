@@ -71,7 +71,7 @@
 (autoload 'whitespace "whitespace" "whitespace" t)
 (setq whitespace-line-column 120)
 
-(setq whitespace-style '(face tabs tab-mark lines-tail trailing))
+(setq whitespace-style '(face lines-tail trailing))
 (set-face-foreground 'whitespace-tab nil)
 (set-face-background 'whitespace-tab nil)
 
@@ -90,6 +90,9 @@
 ;; json-mode
 (load-file "~/.emacs.d/vendor/json-mode/json-mode.el")
 (autoload 'json-mode "json-mode" "Major mode for editing Json files")
+
+;; js2-mode (installed via package manager)
+(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 
 ;;;; other file loaders
 (add-to-list 'load-path "~/.emacs.d/personal/files")

@@ -31,3 +31,5 @@
 [github]
  user = zeeshanlakhani
  token = 1b8ef57c3366eabe9410876d3ddd0411
+[init]
+ templatedir = ~/.git_template

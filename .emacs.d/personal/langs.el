@@ -14,3 +14,8 @@
           'flymake-python-pyflakes-load
           '(lambda ()
              (setq flymake-number-of-errors-to-display nil)))
+
+(setq js2-mode-hook
+      '(lambda () ((progn)
+                (setq js2-missing-semi-one-line-override t)
+                (set-variable 'indent-tabs-mode nil))))
