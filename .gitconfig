@@ -1,6 +1,3 @@
-[user]
- email = zeeshan.lakhani@gmail.com
- name = Zeeshan Lakhani
 [color]
  diff = auto
  status = auto
@@ -29,7 +26,6 @@
 [merge]
  stat = true
 [github]
- user = zeeshanlakhani
- token = 1b8ef57c3366eabe9410876d3ddd0411
+ path = .localrc/gitconfig
 [init]
  templatedir = ~/.git_template

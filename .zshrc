@@ -48,8 +48,8 @@ export PATH="$HOME/.rbenv/bin:$PATH"
 source /usr/local/share/python/virtualenvwrapper.sh
 
 # other sources
-if [ -f ~/.zsh_aliases ]; then
-    source ~/.zsh_aliases
+if [ -f ~/.localrc/.zsh_aliases ]; then
+    source ~/.localrc/.zsh_aliases
 fi
 
 # aliases
