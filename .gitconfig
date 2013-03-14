@@ -1,3 +1,5 @@
+[user]
+ path = .localrc/gitconfig
 [color]
  diff = auto
  status = auto
