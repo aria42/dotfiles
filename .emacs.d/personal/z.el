@@ -86,6 +86,8 @@
 ;; markdown mode
 (autoload 'markdown-mode "markdown-mode" "Major mode for editing Markdown files" t)
 '(markdown-enable-math t)
+(add-to-list 'auto-mode-alist '("\\.mdown\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.mdwn\\'" . markdown-mode))
 
 ;; json-mode
 (load-file "~/.emacs.d/vendor/json-mode/json-mode.el")
