@@ -19,7 +19,7 @@
 ;; Show column-number in the mode line
 (column-number-mode 1)
 
-;; Disable all the version controbl stuff
+;; Disable all the version control stuff
 ;; Makes emacs load much faster inside git repos
 (setq vc-handled-backends nil)
 
