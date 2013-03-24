@@ -19,7 +19,7 @@
 ;; Show column-number in the mode line
 (column-number-mode 1)
 
-;; Disable all the version control stuff
+;; Disable all the version controbl stuff
 ;; Makes emacs load much faster inside git repos
 (setq vc-handled-backends nil)
 
@@ -29,6 +29,15 @@
 (global-set-key (kbd "C-x <right>") 'windmove-right)
 (global-set-key (kbd "C-x <left>") 'windmove-left)
 (global-set-key (kbd "C-l") 'goto-line)
+
+;; Fix for shift up = <select> is undefined for windmove
+(define-key input-decode-map "\e[1;2A" [S-up])
+
+;; size buffers
+(global-set-key (kbd "S-<left>") 'shrink-window-horizontally)
+(global-set-key (kbd "S-<right>") 'enlarge-window-horizontally)
+(global-set-key (kbd "S-<down>") 'shrink-window)
+(global-set-key (kbd "S-<up>") 'enlarge-window)
 
 ;; find func
 (global-set-key (kbd "C-h C-f") 'find-function)
