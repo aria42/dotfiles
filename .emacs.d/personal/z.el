@@ -42,6 +42,9 @@
 ;; find func
 (global-set-key (kbd "C-h C-f") 'find-function)
 
+;; set autocorrect-spelling
+(setq ispell-program-name "/usr/local/bin/aspell")
+
 ;; dirtree
 (autoload 'dirtree "dirtree" "dirtree" t)
 (global-set-key (kbd "C-x C-z") 'dirtree)
@@ -54,6 +57,42 @@
 (global-auto-complete-mode t)
 (ac-set-trigger-key "TAB")
 (setq ac-auto-start 2)
+(setq ac-ignore-case nil)
+
+;; yasnippet
+(load-file "~/.emacs.d/vendor/yasnippet/yasnippet.el")
+(autoload 'yasnippet "yasnippet" "yasnippet" t)
+(setq yas-snippet-dirs
+      '("~/.emacs.d/snippets"
+        "~/.emacs.d/personal/snippets"
+        "~/.emacs.d/vendor/yasnippet/extras/imported"
+        ))
+(add-to-list 'ac-sources 'ac-source-yasnippet)
+(yas-global-mode 1)
+(global-set-key (kbd "C-x C-y") 'yas-insert-snippet)
+
+;; yasnippet -> add some shotcuts in popup menu mode
+(define-key popup-menu-keymap (kbd "M-n") 'popup-next)
+(define-key popup-menu-keymap (kbd "TAB") 'popup-next)
+(define-key popup-menu-keymap (kbd "<tab>") 'popup-next)
+(define-key popup-menu-keymap (kbd "<backtab>") 'popup-previous)
+(define-key popup-menu-keymap (kbd "M-p") 'popup-previous)
+(defun yas/popup-isearch-prompt (prompt choices &optional display-fn)
+  (when (featurep 'popup)
+    (popup-menu*
+     (mapcar
+      (lambda (choice)
+        (popup-make-item
+         (or (and display-fn (funcall display-fn choice))
+             choice)
+         :value choice))
+      choices)
+     :prompt prompt
+     ;; start isearch mode immediately
+     :isearch t)))
+
+(setq yas-prompt-functions '(yas/popup-isearch-prompt yas/no-prompt))
+
 
 ;; geiser, ecd, palm for racket/scheme
 (load-file "~/.emacs.d/vendor/geiser/elisp/geiser.el")
@@ -61,20 +100,11 @@
 (setq geiser-repl-history-filename "~/.emacs.d/geiser-history")
 
 ;; anything
+(load-file "~/.emacs.d/vendor/anything-config/extensions/anything-obsolete.el")
 (require 'anything-config)
 (require 'anything-match-plugin)
 (global-set-key (kbd "C-x C-d") 'anything)
-
-;; yasnippet
-(autoload 'yasnippet "yasnippet" "yasnippet" t)
-(setq yas-snippet-dirs
-      '("~/.emacs.d/snippets"
-        "~/.emacs.d/personal/snippets"
-        "~/.emacs.d/vendor/yasnippet/extras/imported"
-        ))
-(yas-global-mode 1)
-(add-to-list 'ac-sources 'ac-source-yasnippet)
-(global-set-key (kbd "C-x C-y") 'yas-insert-snippet)
+(global-set-key (kbd "C-x C-u") 'yas-expand)
 
 ;; whitespace
 (autoload 'whitespace "whitespace" "whitespace" t)
@@ -112,4 +142,4 @@
 (load-file "~/.emacs.d/personal/langs.el")
 
 ;; compile all the files .elc files which has a corresponding newer .el file, if it exists
-(byte-recompile-directory "~/.emacs.d/core" "~/.emacs.d/modules" 0)
+(byte-recompile-directory "~/.emacs.d" 0 nil)

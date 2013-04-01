@@ -21,3 +21,4 @@ savefile/
 ac-comphist.dat
 flycheck-custom.el
 geiser-history.racket
+projectile-bookmarks.eld
