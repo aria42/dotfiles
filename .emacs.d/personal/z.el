@@ -191,13 +191,6 @@
 ;; js2-mode
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 
-;; obj-c
-(setq auto-mode-alist
-      (cons '("\\.m$" . objc-mode) auto-mode-alist))
-
-(setq auto-mode-alist
-      (cons '("\\.mm$" . objc-mode) auto-mode-alist))
-
 ;; other file-exts for clojure-mode
 (setq auto-mode-alist (cons '("\\.edn$" . clojure-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.cljs$" . clojure-mode) auto-mode-alist))
