@@ -19,6 +19,7 @@ savefile/
 
 # zeeshan changes
 ac-comphist.dat
-flycheck-custom.el
+flycheck-*.el
 geiser-history.racket
 projectile-bookmarks.eld
+.sass-cache

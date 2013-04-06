@@ -1,3 +1,18 @@
+;; packages that must be installed via package-manager
+(prelude-ensure-module-deps '(ac-js2 ac-math ac-nrepl ace-jump-mode
+                                     ack-and-a-half android-mode cl-lib clojure-mode
+                                     clojure-test-mode color-theme color-theme-solarized
+                                     dash diminish dummy-h-mode erc-hl-nicks erlang
+                                     exec-path-from-shell expand-region flymake-easy
+                                     flymake-haskell-multi flymake-json flyspell-lazy
+                                     gh gist git-commit-mode gitconfig-mode gitignore-mode
+                                     go-autocomplete go-mode guru-mode haml-mode haskell-mode
+                                     helm helm-projectile js2-mode logito lua-mode magit
+                                     melpa nginx-mode nrepl org paredit pcache popup
+                                     projectile rainbow-delimiters rainbow-mode sass-mode
+                                     scss-mode simple-httpd skewer-mode spotify tree-mode
+                                     undo-tree volatile-highlights zenburn-theme))
+
 ;; no tabs, normally
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
@@ -13,14 +28,22 @@
 ;; turn off prelude tip of the day
 (setq prelude-tip-of-the-day nil)
 
+;; Show line-number on left-hand side
+(global-linum-mode 0)
+(add-hook 'linum-before-numbering-hook
+          (lambda () (setq linum-format "%d ")))
+
 ;; Show line-number in the mode line
 (line-number-mode 1)
 
 ;; Show column-number in the mode line
 (column-number-mode 1)
 
+;; disable menu at top
+(menu-bar-mode -99)
+
 ;; Disable all the version control stuff
-;; Makes emacs load much faster inside git repos
+; Makes emacs load much faster inside git repos
 (setq vc-handled-backends nil)
 
 ;; switch windows with fun
@@ -33,6 +56,15 @@
 ;; Fix for shift up = <select> is undefined for windmove
 (define-key input-decode-map "\e[1;2A" [S-up])
 
+(if (equal "xterm" (tty-type))
+      (define-key input-decode-map "\e[1;2A" [S-up]))
+
+(defadvice terminal-init-xterm (after select-shift-up activate)
+    (define-key input-decode-map "\e[1;2A" [S-up]))
+
+;; have emacs prompt short-handed y or n
+(fset 'yes-or-no-p 'y-or-n-p)
+
 ;; size buffers
 (global-set-key (kbd "S-<left>") 'shrink-window-horizontally)
 (global-set-key (kbd "S-<right>") 'enlarge-window-horizontally)
@@ -41,6 +73,13 @@
 
 ;; find func
 (global-set-key (kbd "C-h C-f") 'find-function)
+
+;; Set *scratch* empty
+(setq initial-scratch-message nil)
+
+;; Set *scratch* to Clojure mode
+(when (locate-library "clojure-mode")
+  (setq initial-major-mode 'clojure-mode))
 
 ;; set autocorrect-spelling
 (setq ispell-program-name "/usr/local/bin/aspell")
@@ -53,7 +92,18 @@
 (load-file "~/.emacs.d/vendor/autocomplete/auto-complete.el")
 (autoload 'auto-complete-config "auto-complete-config" "autocomplete" t)
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/vendor/autocomplete/dict")
-(setq-default ac-sources (add-to-list 'ac-sources 'ac-source-dictionary))
+(setq-default ac-sources (add-to-list
+                          'ac-sources 'ac-source-dictionary
+                          'ac-source-words-in-buffer))
+
+(dolist (mode '(magit-log-edit-mode log-edit-mode org-mode text-mode haml-mode
+                                    sass-mode scss-mode yaml-mode csv-mode espresso-mode
+                                    haskell-mode html-mode nxml-mode sh-mode smarty-mode
+                                    clojure-mode lisp-mode textile-mode markdown-mode
+                                    tuareg-mode js3-mode js2-mode css-mode less-css-mode
+                                    objc-mode sql-mode))
+  (add-to-list 'ac-modes mode))
+
 (global-auto-complete-mode t)
 (ac-set-trigger-key "TAB")
 (setq ac-auto-start 2)
@@ -93,7 +143,6 @@
 
 (setq yas-prompt-functions '(yas/popup-isearch-prompt yas/no-prompt))
 
-
 ;; geiser, ecd, palm for racket/scheme
 (load-file "~/.emacs.d/vendor/geiser/elisp/geiser.el")
 (setq geiser-active-implementations '(racket))
@@ -105,6 +154,13 @@
 (require 'anything-match-plugin)
 (global-set-key (kbd "C-x C-d") 'anything)
 (global-set-key (kbd "C-x C-u") 'yas-expand)
+
+;; ack-and-a-half
+(autoload 'ack-and-a-half "ack-and-a-half" "ack-and-a-half" t)
+(defalias 'ack 'ack-and-a-half)
+(defalias 'ack-same 'ack-and-a-half-same)
+(defalias 'ack-find-file 'ack-and-a-half-find-file)
+(defalias 'ack-find-file-same 'ack-and-a-half-find-file-same)
 
 ;; whitespace
 (autoload 'whitespace "whitespace" "whitespace" t)
@@ -132,14 +188,42 @@
 (load-file "~/.emacs.d/vendor/json-mode/json-mode.el")
 (autoload 'json-mode "json-mode" "Major mode for editing Json files")
 
-;; js2-mode (installed via package manager)
+;; js2-mode
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+
+;; obj-c
+(setq auto-mode-alist
+      (cons '("\\.m$" . objc-mode) auto-mode-alist))
+
+(setq auto-mode-alist
+      (cons '("\\.mm$" . objc-mode) auto-mode-alist))
+
+;; other file-exts for clojure-mode
+(setq auto-mode-alist (cons '("\\.edn$" . clojure-mode) auto-mode-alist))
+(setq auto-mode-alist (cons '("\\.cljs$" . clojure-mode) auto-mode-alist))
+
+;; nREPL customizations
+
+; Don't aggressively popup stacktraces
+(setq nrepl-popup-stacktraces nil)
+; Display stacktrace inline
+(setq nrepl-popup-stacktraces-in-repl t)
+; Enable eldoc - shows fn argument list in echo area
+(add-hook 'nrepl-interaction-mode-hook 'nrepl-turn-on-eldoc-mode)
+; Use paredit in *nrepl* buffer
+(add-hook 'nrepl-mode-hook 'paredit-mode)
+; Make C-c C-z switch to *nrepl*
+(add-to-list 'same-window-buffer-names "*nrepl*")
 
 ;;;; other file loaders
 (add-to-list 'load-path "~/.emacs.d/personal/files")
 
 ;; load lang-specific hooks
 (load-file "~/.emacs.d/personal/langs.el")
+(load-file "~/.emacs.d/personal/erc/erc-fun.el")
+(load-file "~/.emacs.d/personal/theme-ing.el")
+(load-file "~/.emacs.d/personal/fonts.el")
+(load-file "~/.emacs.d/personal/objective-c-customizations.el")
 
 ;; compile all the files .elc files which has a corresponding newer .el file, if it exists
 (byte-recompile-directory "~/.emacs.d" 0 nil)

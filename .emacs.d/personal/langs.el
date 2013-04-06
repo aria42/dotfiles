@@ -1,4 +1,4 @@
-;;;; explicit for modes
+;; explicit for modes
 
 (add-hook 'java-mode-hook
           '(lambda ()
