@@ -1,9 +1,9 @@
 ;; packages that must be installed via package-manager
-(prelude-ensure-module-deps '(ac-js2 ac-math ac-nrepl ace-jump-mode
+(prelude-ensure-module-deps '(ac-js2 ac-math ac-nrepl ace-jump-mode auto-complete-clang
                                      ack-and-a-half android-mode cl-lib clojure-mode
                                      clojure-test-mode color-theme color-theme-solarized
-                                     dash diminish dummy-h-mode erc-hl-nicks erlang
-                                     exec-path-from-shell expand-region flymake-easy
+                                     dash diminish dummy-h-mode erc-hl-nicks erlang ctags
+                                     exec-path-from-shell expand-region flymake-easy ctags-update
                                      flymake-haskell-multi flymake-json flyspell-lazy
                                      gh gist git-commit-mode gitconfig-mode gitignore-mode
                                      go-autocomplete go-mode guru-mode haml-mode haskell-mode
@@ -11,7 +11,7 @@
                                      melpa nginx-mode nrepl org paredit pcache popup
                                      projectile rainbow-delimiters rainbow-mode sass-mode
                                      scss-mode simple-httpd skewer-mode spotify tree-mode
-                                     undo-tree volatile-highlights zenburn-theme))
+                                     undo-tree volatile-highlights zenburn-theme icicles))
 
 ;; no tabs, normally
 (setq-default indent-tabs-mode nil)
@@ -39,6 +39,8 @@
 ;; Show column-number in the mode line
 (column-number-mode 1)
 
+
+
 ;; disable menu at top
 (menu-bar-mode -99)
 
@@ -53,7 +55,7 @@
 (global-set-key (kbd "C-x <left>") 'windmove-left)
 (global-set-key (kbd "C-l") 'goto-line)
 
-;; Fix for shift up = <select> is undefined for windmove
+;; Fix for shift up = <select> is undefined
 (define-key input-decode-map "\e[1;2A" [S-up])
 
 (if (equal "xterm" (tty-type))
@@ -65,6 +67,16 @@
 ;; have emacs prompt short-handed y or n
 (fset 'yes-or-no-p 'y-or-n-p)
 
+;; ignore byte-compile warnings
+(setq byte-compile-warnings '(not nresolved
+                                  free-vars
+                                  callargs
+                                  redefine
+                                  obsolete
+                                  noruntime
+                                  cl-functions
+                                  interactive-only))
+
 ;; size buffers
 (global-set-key (kbd "S-<left>") 'shrink-window-horizontally)
 (global-set-key (kbd "S-<right>") 'enlarge-window-horizontally)
@@ -73,6 +85,7 @@
 
 ;; find func
 (global-set-key (kbd "C-h C-f") 'find-function)
+(global-set-key (kbd "M-z") 'ff-find-other-file)
 
 ;; Set *scratch* empty
 (setq initial-scratch-message nil)
@@ -83,6 +96,9 @@
 
 ;; set autocorrect-spelling
 (setq ispell-program-name "/usr/local/bin/aspell")
+
+;; turn icicles on
+(icy-mode 1)
 
 ;; dirtree
 (autoload 'dirtree "dirtree" "dirtree" t)
@@ -162,6 +178,14 @@
 (defalias 'ack-find-file 'ack-and-a-half-find-file)
 (defalias 'ack-find-file-same 'ack-and-a-half-find-file-same)
 
+;; surpress killing confirms
+(defadvice save-buffers-kill-emacs (around no-query-kill-emacs activate)
+  "Prevent annoying \"Active processes exist\" query when you quit Emacs."
+  (flet ((process-list ())) ad-do-it))
+
+;; hide certain compilation buffers
+(require 'aj-compilation)
+
 ;; whitespace
 (autoload 'whitespace "whitespace" "whitespace" t)
 (setq whitespace-line-column 120)
@@ -208,15 +232,15 @@
 ; Make C-c C-z switch to *nrepl*
 (add-to-list 'same-window-buffer-names "*nrepl*")
 
-;;;; other file loaders
-(add-to-list 'load-path "~/.emacs.d/personal/files")
-
 ;; load lang-specific hooks
 (load-file "~/.emacs.d/personal/langs.el")
 (load-file "~/.emacs.d/personal/erc/erc-fun.el")
 (load-file "~/.emacs.d/personal/theme-ing.el")
 (load-file "~/.emacs.d/personal/fonts.el")
 (load-file "~/.emacs.d/personal/objective-c-customizations.el")
+
+;;;; other file loaders
+(add-to-list 'load-path "~/.emacs.d/personal/files")
 
 ;; compile all the files .elc files which has a corresponding newer .el file, if it exists
 (byte-recompile-directory "~/.emacs.d" 0 nil)
