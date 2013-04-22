@@ -39,8 +39,6 @@
 ;; Show column-number in the mode line
 (column-number-mode 1)
 
-
-
 ;; disable menu at top
 (menu-bar-mode -99)
 
