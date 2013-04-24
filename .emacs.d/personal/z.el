@@ -4,7 +4,7 @@
                                      clojure-test-mode color-theme color-theme-solarized
                                      dash diminish dummy-h-mode erc-hl-nicks erlang ctags
                                      exec-path-from-shell expand-region flymake-easy ctags-update
-                                     flymake-haskell-multi flymake-json flyspell-lazy
+                                     flymake-haskell-multi flymake-json flyspell-lazy sml-mode
                                      gh gist git-commit-mode gitconfig-mode gitignore-mode
                                      go-autocomplete go-mode guru-mode haml-mode haskell-mode
                                      helm helm-projectile js2-mode logito lua-mode magit
