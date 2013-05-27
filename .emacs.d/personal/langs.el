@@ -24,3 +24,15 @@
     (function (lambda ()
                 (setq indent-tabs-mode nil)
                 (setq c-indent-level 4))))
+
+(defun processing-mode-init ()
+  (autoload 'processing-snippets-initialize "processing-mode" nil nil nil)
+  (eval-after-load 'yasnippet '(processing-snippets-initialize))
+
+  (make-local-variable 'ac-user-dictionary)
+  (setq ac-user-dictionary processing-functions)
+  (setq ac-user-dictionary (append ac-user-dictionary processing-builtins))
+  (setq ac-user-dictionary (append ac-user-dictionary processing-constants)))
+
+(add-hook 'processing-mode-hook 'processing-mode-init)
+

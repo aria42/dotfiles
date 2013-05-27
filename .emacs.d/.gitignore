@@ -23,3 +23,5 @@ flycheck-*.el
 geiser-history.racket
 projectile-bookmarks.eld
 .sass-cache
+projectile-bookmarks.eld
+session*

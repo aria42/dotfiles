@@ -1,5 +1,5 @@
 ;; packages that must be installed via package-manager
-(prelude-ensure-module-deps '(ac-js2 ac-math ac-nrepl ace-jump-mode auto-complete-clang
+(prelude-ensure-module-deps '(ac-js2 ac-math ac-nrepl ace-jump-mode
                                      ack-and-a-half android-mode cl-lib clojure-mode
                                      clojure-test-mode color-theme color-theme-solarized
                                      dash diminish dummy-h-mode erc-hl-nicks erlang ctags
@@ -11,7 +11,8 @@
                                      melpa nginx-mode nrepl org paredit pcache popup
                                      projectile rainbow-delimiters rainbow-mode sass-mode
                                      scss-mode simple-httpd skewer-mode spotify tree-mode
-                                     undo-tree volatile-highlights zenburn-theme icicles))
+                                     undo-tree volatile-highlights zenburn-theme icicles
+                                     processing-mode))
 
 ;; no tabs, normally
 (setq-default indent-tabs-mode nil)
@@ -43,7 +44,7 @@
 (menu-bar-mode -99)
 
 ;; Disable all the version control stuff
-; Makes emacs load much faster inside git repos
+;; Makes emacs load much faster inside git repos
 (setq vc-handled-backends nil)
 
 ;; switch windows with fun
@@ -104,8 +105,18 @@
 
 ;; autocomplete
 (load-file "~/.emacs.d/vendor/autocomplete/auto-complete.el")
+(load-file "~/.emacs.d/vendor/auto-complete-clang/auto-complete-clang.el")
+
 (autoload 'auto-complete-config "auto-complete-config" "autocomplete" t)
+(require 'auto-complete-clang-async)
+
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/vendor/autocomplete/dict")
+
+(defun ac-cc-mode-setup ()
+  (setq ac-clang-complete-executable "~/.emacs.d/vendor/emacs-clang-complete-async/clang-complete")
+  (setq ac-sources '(ac-source-clang-async))
+  (ac-clang-launch-completion-process))
+
 (setq-default ac-sources (add-to-list
                           'ac-sources 'ac-source-dictionary
                           'ac-source-words-in-buffer))
@@ -115,13 +126,17 @@
                                     haskell-mode html-mode nxml-mode sh-mode smarty-mode
                                     clojure-mode lisp-mode textile-mode markdown-mode
                                     tuareg-mode js3-mode js2-mode css-mode less-css-mode
-                                    objc-mode sql-mode))
+                                    objc-mode sql-mode processing-mode))
   (add-to-list 'ac-modes mode))
+
+(add-hook 'objc-mode-hook 'ac-cc-mode-setup)
 
 (global-auto-complete-mode t)
 (ac-set-trigger-key "TAB")
 (setq ac-auto-start 2)
 (setq ac-ignore-case nil)
+
+(global-set-key (kbd "C-`") 'ac-complete-clang)
 
 ;; yasnippet
 (load-file "~/.emacs.d/vendor/yasnippet/yasnippet.el")
@@ -212,6 +227,16 @@
 
 ;; js2-mode
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+
+;; pod files
+(add-to-list 'auto-mode-alist '("Podfile$" . ruby-mode)) ;; support Podfiles
+(add-to-list 'auto-mode-alist '("\\.podspec$" . ruby-mode)) ;; support Podspecs
+
+;; processing
+(add-to-list 'auto-mode-alist '("\\.pde$" . processing-mode))
+(setq processing-location "/usr/bin/processing-java")
+(setq processing-application-dir "/Applications/Processing.app")
+(setq processing-sketch-dir "~/Documents/Processing")
 
 ;; other file-exts for clojure-mode
 (setq auto-mode-alist (cons '("\\.edn$" . clojure-mode) auto-mode-alist))

@@ -208,6 +208,7 @@ Keybinding         | Description
 <kbd>F12</kbd>     | Toggle the Emacs menu bar.
 <kbd>C-x g</kbd>   | Open Magit's status buffer.
 <kbd>C-=</kbd>     | Run `expand-region` (incremental text selection).
+<kbd>C-a</kbd>     | Run `prelude-move-beginning-of-line`. Read [this](http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/) for details.
 
 #### Prelude Mode
 
@@ -258,7 +259,34 @@ If you ever forget any of Projectile's keybindings just do a:
 
 <kbd>C-c p C-h</kbd>
 
-### Automatic package installation
+#### Key-chords
+
+Keybinding         | Description
+-------------------|----------------------------------------------
+<kbd>jj</kbd>      | Jump to the beginning of a word(`ace-jump-word-mode`)
+<kbd>jk</kbd>      | Jump to a character(`ace-jump-char-mode`)
+<kbd>jl</kbd>      | Jump to the beginning of a line(`ace-jump-line-mode`)
+<kbd>JJ</kbd>      | Jump back to previous buffer(`prelude-switch-to-previous-buffer`)
+<kbd>uu</kbd>      | View edits as a tree(`undo-tree-visualize`)
+
+##### Disabling key-chords
+
+In some cases you may not want to have a key-chord that is defined by prelude,
+in which case you can disable the binding in your `personal.el` file by setting
+its command to `nil`. For example, to disable the `kk` key-chord add the
+following line:
+
+    ```lisp
+    (key-chord-define-global "jj" nil)
+    ```
+
+If you're an `evil-mode` user you'll probably do well to disable `key-chord-mode` altogether:
+
+    ```lisp
+    (key-chord-mode -1)
+    ```
+
+## Automatic package installation
 
 The default Prelude installation comes with a bare minimum of
 functionality. It will however install add-ons for various programming
@@ -388,6 +416,17 @@ personal Emacs customization to enable them permanently:
 
 ```lisp
 (setq prelude-guru nil)
+```
+
+### Customized C-a behavior
+
+Prelude overrides `C-a` to behave as described
+[here](http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/). If
+you don't like that simply add this to your personal config:
+
+```lisp
+(global-set-key [remap move-beginning-of-line]
+                'move-beginning-of-line)
 ```
 
 ### Windows compatibility

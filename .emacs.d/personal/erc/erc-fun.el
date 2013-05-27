@@ -46,6 +46,6 @@
 ;; logging settings
 (setq erc-enable-logging t
       erc-log-mode nil                                  ; close log mode
-      erc-log-channels-directory  "~/.emacs.d/erc/logs"
+      erc-log-channels-directory  "~/.emacs.d/personal/erc/logs"
       erc-save-buffer-on-part t ; logs automatically written when you part or quit a channel
       erc-log-file-coding-system 'utf-8)

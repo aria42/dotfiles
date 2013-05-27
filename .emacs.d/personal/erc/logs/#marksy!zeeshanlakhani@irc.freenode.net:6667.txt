@@ -1,0 +1,107 @@
+           *** You have joined channel #marksy                                                                [11:02:02]
+           *** Topic for #marksy: youths hats ftw
+           *** #marksy: topic set by
+               saolsen!~steveo@li557-148.members.linode.com, 2013-04-15
+               16:04:47
+           *** Users on #marksy: zeeshanlakhani bowmanb_ clintnewsom
+               jeremyheiler saolsen
+           *** #marksy modes: +cnt
+           *** #marksy was created on 2013-02-26 13:53:57
+     <saolsen> friday                                                                                         [11:21:41]
+     <saolsen> then hack the weekend                                                                          [11:21:45]
+    <bowmanb_> what you gonna hack on                                                                         [11:26:51]
+     <saolsen> mostly the planet                                                                              [11:27:08]
+     <saolsen> (in my game)                                                                                   [11:27:15]
+     <saolsen> game stuffs                                                                                    [11:27:22]
+    <bowmanb_> cool                                                                                           [11:27:25]
+     <saolsen> gonna work on the controls more                                                                [11:27:36]
+     <saolsen> and also try to get fsharp working                                                             [11:27:43]
+     <saolsen> because I need to write more                                                                   [11:28:04]
+     <saolsen> and because if blocks are gross                                                                [11:28:18]
+    <bowmanb_> i feel you, i'm starting to hate them                                                          [11:29:03]
+     <saolsen> really excited to have monday off                                                              [11:32:36]
+<zeeshanlakhani> me too                                                                                       [11:35:11]
+    <bowmanb_> same here, and almost no plans                                                                 [11:45:00]
+    <bowmanb_> = lots of hacking                                                                              [11:47:01]
+     <saolsen> gonna wear the youths hat today because the mets are going to
+               beat the braves                                                                                [11:48:09]
+    <bowmanb_> that's pretty clear                                                                            [11:48:33]
+           *** bowmanb_
+               (~bowmanb@207-237-9-62.c3-0.wsd-ubr1.qens-wsd.ny.cable.rcn.com)
+               has quit: Remote host closed the connection                                                    [11:54:51]
+           *** bowmanb (~bowmanb@38.98.105.130) has joined channel #marksy                                    [11:55:28]
+           *** bowmanb_
+               (~bowmanb@207-237-9-62.c3-0.wsd-ubr1.qens-wsd.ny.cable.rcn.com)
+               has joined channel #marksy                                                                     [12:35:51]
+           *** bowmanb (~bowmanb@38.98.105.130) has quit: Ping timeout: 256
+               seconds                                                                                        [12:39:38]
+           *** bowmanb_
+               (~bowmanb@207-237-9-62.c3-0.wsd-ubr1.qens-wsd.ny.cable.rcn.com)
+               has quit: Remote host closed the connection                                                    [12:59:59]
+           *** bowmanb (~bowmanb@38.98.105.130) has joined channel #marksy                                    [13:00:57]
+           *** bowmanb_
+               (~bowmanb@207-237-9-62.c3-0.wsd-ubr1.qens-wsd.ny.cable.rcn.com)
+               has joined channel #marksy                                                                     [13:07:44]
+           *** bowmanb (~bowmanb@38.98.105.130) has quit: Ping timeout: 256
+               seconds                                                                                        [13:10:54]
+           *** bowmanb_
+               (~bowmanb@207-237-9-62.c3-0.wsd-ubr1.qens-wsd.ny.cable.rcn.com)
+               has quit: Remote host closed the connection                                                    [13:39:46]
+           *** bowmanb (~bowmanb@38.98.105.130) has joined channel #marksy                                    [13:40:13]
+           *** bowmanb_
+               (~bowmanb@207-237-9-62.c3-0.wsd-ubr1.qens-wsd.ny.cable.rcn.com)
+               has joined channel #marksy                                                                     [13:42:56]
+           *** bowmanb (~bowmanb@38.98.105.130) has quit: Ping timeout: 256
+               seconds                                                                                        [13:46:30]
+    <bowmanb_> def need dem 3 days                                                                            [13:51:56]
+<jeremyheiler> the inlaws arrive Sunday afternoon *sigh*                                                      [13:52:23]
+    <bowmanb_> hah, yeah, ill probably be with psuedo inlaws                                                  [13:56:13]
+    <bowmanb_> but i see them so much i dont have to hang out with them the
+               whole time                                                                                     [13:56:27]
+<jeremyheiler> mine live far away, so they usually have to stay the night.                                    [14:06:07]
+<jeremyheiler> I'll be putting them to work, though                                                           [14:06:20]
+<jeremyheiler> yard work!                                                                                     [14:06:37]
+<jeremyheiler> they actually enjoy doing that kind of stuff, so might as well
+               get some done.                                                                                 [14:07:04]
+    <bowmanb_> while you sit on your deck hacking                                                             [14:09:44]
+<jeremyheiler> oh yea                                                                                         [14:10:56]
+<jeremyheiler> i wish                                                                                         [14:11:03]
+     <saolsen> imma just hack                                                                                 [14:21:55]
+     <saolsen> no social interactions to distract me                                                          [14:22:07]
+    <bowmanb_> social interaction is overrated                                                                [14:27:38]
+     <saolsen> hickey in #clojure talking about core.async                                                    [14:56:13]
+    <bowmanb_> damn, wasnt in there                                                                           [15:01:33]
+<jeremyheiler> http://clojure-log.n01se.net/                                                                  [15:02:06]
+    <bowmanb_> nice, thanks                                                                                   [15:05:40]
+    <bowmanb_> the man is always inspiring                                                                    [15:07:22]
+<jeremyheiler> yeah definitely                                                                                [15:40:54]
+           *** bowmanb_
+               (~bowmanb@207-237-9-62.c3-0.wsd-ubr1.qens-wsd.ny.cable.rcn.com)
+               has quit: Remote host closed the connection                                                    [16:02:53]
+           *** bowmanb (~bowmanb@38.98.105.130) has joined channel #marksy                                    [16:03:19]
+           *** bowmanb_
+               (~bowmanb@207-237-9-62.c3-0.wsd-ubr1.qens-wsd.ny.cable.rcn.com)
+               has joined channel #marksy                                                                     [16:08:59]
+           *** bowmanb (~bowmanb@38.98.105.130) has quit: Ping timeout: 256
+               seconds                                                                                        [16:12:59]
+     <saolsen> rip bowmanb                                                                                    [16:19:29]
+    <bowmanb_> fuk u vpn                                                                                      [16:20:27]
+     <saolsen> thats what happens when you never go to werk                                                   [16:25:25]
+    <bowmanb_> i'm here                                                                                       [16:27:56]
+     <saolsen> want to trade                                                                                  [16:30:00]
+     <saolsen> saml                                                                                           [16:30:01]
+     <saolsen> for gamedev                                                                                    [16:30:04]
+    <bowmanb_> i will trade u saml for saml                                                                   [16:32:47]
+     <saolsen> do not want                                                                                    [16:37:13]
+     <saolsen> ugh, in the saml spec there are 128 different ways to implement
+               authentication                                                                                 [16:37:42]
+     <saolsen> and this java library is a whole pile of abstract class
+               bullshits                                                                                      [16:37:55]
+    <bowmanb_> lol                                                                                            [16:37:58]
+    <bowmanb_> do not want                                                                                    [16:38:50]
+     <saolsen> hate java                                                                                      [16:39:02]
+    <bowmanb_> i am trying to figure out how to use this apiary mock API
+               properly without involving avi                                                                 [16:39:12]
+     <saolsen> good plan not to involve him                                                                   [16:39:29]
+    <bowmanb_> unfortunately, i think im going to have to send him a pull
+               request                                                                                        [16:42:36]

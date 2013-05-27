@@ -68,6 +68,18 @@ fis () {
     find . -type f -name $1
 }
 
+xc () {
+    xcode_proj=`find . -name "*.xc*" -d 1 | sort -r | head -1`
+
+    if [ `echo -n $xcode_proj | wc -m` -eq 0 ]
+    then
+        echo "No xcworkspace/xcodeproj file found in the current directory."
+    else
+        echo "Found $xcode_proj"
+        open $xcode_proj
+    fi
+}
+
 . `brew --prefix`/etc/profile.d/z.sh
 
 # evals
