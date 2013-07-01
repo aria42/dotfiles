@@ -85,15 +85,27 @@ With a prefix ARG always prompt for command to use."
   "Insert an empty line above the current line.
 Position the cursor at it's beginning, according to the current mode."
   (interactive)
+  (move-beginning-of-line nil)
+  (newline-and-indent)
   (forward-line -1)
-  (prelude-smart-open-line))
+  (indent-according-to-mode))
 
-(defun prelude-smart-open-line ()
+(defun prelude-smart-open-line (arg)
   "Insert an empty line after the current line.
-Position the cursor at its beginning, according to the current mode."
+Position the cursor at its beginning, according to the current mode.
+
+With a prefix ARG open line above the current line."
+  (interactive "P")
+  (if arg
+      (prelude-smart-open-line-above)
+    (progn
+      (move-end-of-line nil)
+      (newline-and-indent))))
+
+(defun prelude-top-join-line ()
+  "Join the current line with the line beneath it."
   (interactive)
-  (move-end-of-line nil)
-  (newline-and-indent))
+  (delete-indentation 1))
 
 (defun prelude-move-line-up ()
   "Move the current line up."
@@ -288,6 +300,8 @@ buffer is not visiting a file."
   "Find file as root if necessary."
   (unless (or (equal major-mode 'dired-mode)
               (and (buffer-file-name)
+                   (not (file-exists-p (file-name-directory (buffer-file-name)))))
+              (and (buffer-file-name)
                    (file-writable-p buffer-file-name)))
     (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
 
@@ -307,12 +321,12 @@ the current buffer."
   (interactive)
   (insert (format-time-string "%c" (current-time))))
 
-(defun prelude-conditionally-enable-paredit-mode ()
-  "Enable `paredit-mode' in the minibuffer, during `eval-expression'."
-  (if (eq this-command 'eval-expression)
-      (paredit-mode 1)))
+;; (defun prelude-conditionally-enable-paredit-mode ()
+;;   "Enable `paredit-mode' in the minibuffer, during `eval-expression'."
+;;   (if (eq this-command 'eval-expression)
+;;       (paredit-mode 1)))
 
-(add-hook 'minibuffer-setup-hook 'prelude-conditionally-enable-paredit-mode)
+;; (add-hook 'minibuffer-setup-hook 'prelude-conditionally-enable-paredit-mode)
 
 (defun prelude-recentf-ido-find-file ()
   "Find a recent file using ido."
@@ -406,6 +420,7 @@ Doesn't mess with special buffers."
     (message "Updating Prelude...")
     (cd prelude-dir)
     (shell-command "git pull")
+    (prelude-recompile-init)
     (message "Update finished. Restart Emacs to complete the process.")))
 
 (provide 'prelude-core)

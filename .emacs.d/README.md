@@ -20,7 +20,7 @@ can skip the whole manual and just type in your favorite shell the
 following command:
 
 ```bash
-$ curl -L https://github.com/bbatsov/prelude/raw/master/utils/installer.sh | sh
+curl -L http://git.io/epre | sh
 ```
 
 You can now power up your Emacs, sit back and enjoy Prelude,
@@ -31,13 +31,13 @@ source repository and the installation directory. To change the
 installation directory:
 
 ```bash
-$ export PRELUDE_INSTALL_DIR="$HOME/.emacs.d" && curl -L https://github.com/bbatsov/prelude/raw/master/utils/installer.sh | sh
+export PRELUDE_INSTALL_DIR="$HOME/.emacs.d" && curl -L https://github.com/bbatsov/prelude/raw/master/utils/installer.sh | sh
 ```
 
 To change the source repository:
 
 ```bash
-$ export PRELUDE_URL="https://github.com/yourname/prelude.git" && curl -L https://github.com/bbatsov/prelude/raw/master/utils/installer.sh | sh
+export PRELUDE_URL="https://github.com/yourname/prelude.git" && curl -L https://github.com/bbatsov/prelude/raw/master/utils/installer.sh | sh
 ```
 
 Note that the installer will back up any existing `.emacs` file or
@@ -65,7 +65,7 @@ You can install **Emacs Prelude** via the command line with either `curl` or
 If you're using `curl` type the following command:
 
 ```bash
-$ curl -L https://github.com/bbatsov/prelude/raw/master/utils/installer.sh | sh
+curl -L https://github.com/bbatsov/prelude/raw/master/utils/installer.sh | sh
 ```
 
 #### Via Wget
@@ -73,15 +73,15 @@ $ curl -L https://github.com/bbatsov/prelude/raw/master/utils/installer.sh | sh
 If you're using `wget` type:
 
 ```bash
-$ wget --no-check-certificate https://github.com/bbatsov/prelude/raw/master/utils/installer.sh -O - | sh
+wget --no-check-certificate https://github.com/bbatsov/prelude/raw/master/utils/installer.sh -O - | sh
 ```
 
 ### Manual
 
 ```bash
-$ git clone git://github.com/bbatsov/prelude.git path/to/local/repo
-$ ln -s path/to/local/repo ~/.emacs.d
-$ cd ~/.emacs.d
+git clone git://github.com/bbatsov/prelude.git path/to/local/repo
+ln -s path/to/local/repo ~/.emacs.d
+cd ~/.emacs.d
 ```
 
 You'd do well to replace `~/.emacs.d` with the value of
@@ -93,8 +93,8 @@ You'd do well to replace `~/.emacs.d` with the value of
 The update procedure is fairly straightforward:
 
 ```bash
-$ cd path/to/prelude/installation
-$ git pull
+cd path/to/prelude/installation
+git pull
 ```
 
 The `path/to/prelude/installation` is usually `~/.emacs.d` (at least
@@ -152,15 +152,15 @@ Nothing fancy here. Just start Emacs as usual. Personally I run Emacs
 in daemon mode:
 
 ```bash
-$ emacs --daemon
+emacs --daemon
 ```
 
 Afterwards I connect to the server with either a terminal or a GUI
 client like this:
 
 ```bash
-$ emacsclient -t
-$ emacsclient -c
+emacsclient -t
+emacsclient -c
 ```
 
 You'd probably do well to put a few aliases in your `.zshrc` (or
@@ -197,13 +197,13 @@ Keybinding         | Description
 <kbd>C-+</kbd>     | Increase font size(`text-scale-increase`).
 <kbd>C--</kbd>     | Decrease font size(`text-scale-decrease`).
 <kbd>C-x O</kbd>   | Go back to previous window (the inverse of `other-window` (`C-x o`)).
-<kbd>C-x ^</kbd>   | Join two lines into one(`join-line`).
+<kbd>C-^</kbd>     | Join two lines into one(`prelude-top-join-line`).
 <kbd>C-x p</kbd>   | Start `proced` (manage processes from Emacs; works only in Linux).
 <kbd>C-x m</kbd>   | Start `eshell`.
 <kbd>C-x M-m</kbd> | Start your default shell.
 <kbd>C-x C-m</kbd> | Alias for `M-x`.
 <kbd>C-h A</kbd>   | Run `apropos` (search in all Emacs symbols).
-<kbd>M-\\</kbd>     | Run `hippie-expand` (a replacement for the default `dabbrev-expand`).
+<kbd>M-/</kbd>     | Run `hippie-expand` (a replacement for the default `dabbrev-expand`).
 <kbd>C-x C-b</kbd> | Open `ibuffer` (a replacement for the default `buffer-list`).
 <kbd>F12</kbd>     | Toggle the Emacs menu bar.
 <kbd>C-x g</kbd>   | Open Magit's status buffer.
@@ -216,8 +216,8 @@ Keybinding         | Description
 -------------------|------------------------------------------------------------
 <kbd>C-c o</kbd>   | Open the currently visited file with an external program.
 <kbd>C-c g</kbd>   | Search in Google for the thing under point (or an interactive query).
-<kbd>C-S-RET</kbd> | Insert an empty line above the current line and indent it properly
-<kbd>S-RET</kbd>   | Insert an empty line and indent it properly (as in most IDEs).
+<kbd>C-S-RET</kbd> or <kbd>M-o</kbd> | Insert an empty line above the current line and indent it properly
+<kbd>S-RET</kbd> or <kbd>M-O</kbd> | Insert an empty line and indent it properly (as in most IDEs).
 <kbd>C-S-up</kbd>  | Move the current line up.
 <kbd>C-S-down</kbd> | Move the current line down.
 <kbd>C-c n</kbd> | Fix indentation in buffer and strip whitespace.
@@ -239,6 +239,7 @@ Here's a list of functionality provided by [Projectile](https://github.com/bbats
 Keybinding         | Description
 -------------------|------------------------------------------------------------
 <kbd>C-c p f</kbd> | Display a list of all files in the project. With a prefix argument it will clear the cache first.
+<kbd>C-c p d</kbd> | Display a list of all directories in the project. With a prefix argument it will clear the cache first.
 <kbd>C-c p T</kbd> | Display a list of all test files(specs, features, etc) in the project.
 <kbd>C-c p g</kbd> | Run grep on the files in the project.
 <kbd>C-c p b</kbd> | Display a list of all project buffers currently open.
@@ -247,10 +248,10 @@ Keybinding         | Description
 <kbd>C-c p i</kbd> | Invalidates the project cache (if existing).
 <kbd>C-c p R</kbd> | Regenerates the projects `TAGS` file.
 <kbd>C-c p k</kbd> | Kills all project buffers.
-<kbd>C-c p d</kbd> | Opens the root of the project in `dired`.
+<kbd>C-c p D</kbd> | Opens the root of the project in `dired`.
 <kbd>C-c p e</kbd> | Shows a list of recently visited project files.
 <kbd>C-c p a</kbd> | Runs `ack` on the project. Requires the presence of `ack-and-a-half`.
-<kbd>C-c p l</kbd> | Runs a standard compilation command for your type of project.
+<kbd>C-c p c</kbd> | Runs a standard compilation command for your type of project.
 <kbd>C-c p p</kbd> | Runs a standard test command for your type of project.
 <kbd>C-c p z</kbd> | Adds the currently visited to the cache.
 <kbd>C-c p s</kbd> | Display a list of known projects you can switch to.
@@ -273,18 +274,18 @@ Keybinding         | Description
 
 In some cases you may not want to have a key-chord that is defined by prelude,
 in which case you can disable the binding in your `personal.el` file by setting
-its command to `nil`. For example, to disable the `kk` key-chord add the
+its command to `nil`. For example, to disable the `jj` key-chord add the
 following line:
 
-    ```lisp
-    (key-chord-define-global "jj" nil)
-    ```
+```lisp
+(key-chord-define-global "jj" nil)
+```
 
 If you're an `evil-mode` user you'll probably do well to disable `key-chord-mode` altogether:
 
-    ```lisp
-    (key-chord-mode -1)
-    ```
+```lisp
+(key-chord-mode -1)
+```
 
 ## Automatic package installation
 
@@ -379,7 +380,7 @@ system. You can install `aspell` and the dictionary on OS X with
 `homebrew` like this:
 
 ```bash
-$ brew install aspell --with-lang=en
+brew install aspell --with-lang=en
 ```
 
 On Linux distros - just use your distro's package manager.
@@ -390,7 +391,7 @@ If your Emacs looks considerably uglier in a terminal (compared to the
 GUI version) try adding this to your `.bashrc` or `.zshrc`:
 
 ```bash
-$ export TERM=xterm-256color
+export TERM=xterm-256color
 ```
 
 Source the `.bashrc` file and start Emacs again.

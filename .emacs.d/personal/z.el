@@ -177,19 +177,15 @@
 (setq geiser-active-implementations '(racket))
 (setq geiser-repl-history-filename "~/.emacs.d/geiser-history")
 
-;; anything
-(load-file "~/.emacs.d/vendor/anything-config/extensions/anything-obsolete.el")
-(require 'anything-config)
-(require 'anything-match-plugin)
-(global-set-key (kbd "C-x C-d") 'anything)
-(global-set-key (kbd "C-x C-u") 'yas-expand)
-
 ;; ack-and-a-half
 (autoload 'ack-and-a-half "ack-and-a-half" "ack-and-a-half" t)
 (defalias 'ack 'ack-and-a-half)
 (defalias 'ack-same 'ack-and-a-half-same)
 (defalias 'ack-find-file 'ack-and-a-half-find-file)
 (defalias 'ack-find-file-same 'ack-and-a-half-find-file-same)
+
+;; helm shorcut
+(global-set-key (kbd "C-x C-d") 'helm-prelude)
 
 ;; surpress killing confirms
 (defadvice save-buffers-kill-emacs (around no-query-kill-emacs activate)
@@ -267,3 +263,15 @@
 
 ;; compile all the files .elc files which has a corresponding newer .el file, if it exists
 (byte-recompile-directory "~/.emacs.d" 0 nil)
+
+;; remove .elc on save hook
+(defun remove-elc-on-save ()
+  "If you're saving an elisp file, likely the .elc is no longer valid."
+  (add-hook 'after-save-hook
+            (lambda ()
+              (if (file-exists-p (concat buffer-file-name "c"))
+                  (delete-file (concat buffer-file-name "c"))))
+            nil
+            t))
+
+(add-hook 'emacs-lisp-mode-hook 'remove-elc-on-save)
