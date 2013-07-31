@@ -59,13 +59,6 @@ alias sml='rlwrap sml'
 alias emacst='emacsclient -t -a vim'
 alias spot="osascript ~/SpotifyControl/SpotifyControl.scpt"
 
-## readability aliases
-
-# To decrypt
-alias credd='openssl aes-256-cbc -d -a -in creds -out creds.txt'
-# to encrypt
-alias crede='openssl aes-256-cbc -a -salt -in creds.txt -out creds'
-
 # functions
 skill () {
     kill -9 `ps ax | grep $1 | grep -v grep | awk '{print $1}'`
