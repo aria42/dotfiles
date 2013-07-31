@@ -34,8 +34,8 @@
                                         ac-source-gtags)
                                       ac-sources)))
   ;; Setup indentation
-  (setq tab-width 4)
-  (c-set-style "java")
+  (setq-default indent-tabs-mode nil)
+  (setq-default c-basic-offset 4)
   (c-set-offset 'brace-list-close '-)
   (c-set-offset 'brace-list-intro '0)
   (c-set-offset 'arglist-close '0)

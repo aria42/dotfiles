@@ -19,14 +19,17 @@
  changed = green
  untracked = cyan
 [core]
- editor = emacs
+ editor = emacsclient -t -a vim
  excludesfile = /Users/zeeshanlakhani/.gitignore
 [alias]
  last = cat-file commit HEAD
  lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+	root = !pwd
 [merge]
  stat = true
 [init]
  templatedir = ~/.git_template
 [include]
  path = .localrc/.gitconfig
+[push]
+	default = simple

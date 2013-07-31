@@ -12,7 +12,7 @@
                                      projectile rainbow-delimiters rainbow-mode sass-mode
                                      scss-mode simple-httpd skewer-mode spotify tree-mode
                                      undo-tree volatile-highlights zenburn-theme icicles
-                                     processing-mode))
+                                     processing-mode smartparens))
 
 ;; no tabs, normally
 (setq-default indent-tabs-mode nil)
@@ -67,14 +67,7 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 ;; ignore byte-compile warnings
-(setq byte-compile-warnings '(not nresolved
-                                  free-vars
-                                  callargs
-                                  redefine
-                                  obsolete
-                                  noruntime
-                                  cl-functions
-                                  interactive-only))
+(setq byte-compile-warnings nil)
 
 ;; size buffers
 (global-set-key (kbd "S-<left>") 'shrink-window-horizontally)
@@ -243,13 +236,17 @@
 ; Don't aggressively popup stacktraces
 (setq nrepl-popup-stacktraces nil)
 ; Display stacktrace inline
-(setq nrepl-popup-stacktraces-in-repl t)
+; (setq nrepl-popup-stacktraces-in-repl t)
 ; Enable eldoc - shows fn argument list in echo area
 (add-hook 'nrepl-interaction-mode-hook 'nrepl-turn-on-eldoc-mode)
 ; Use paredit in *nrepl* buffer
 (add-hook 'nrepl-mode-hook 'paredit-mode)
 ; Make C-c C-z switch to *nrepl*
 (add-to-list 'same-window-buffer-names "*nrepl*")
+; enable camelcase for editing commands
+(add-hook 'nrepl-mode-hook 'subword-mode)
+; enable nrepl smartparens mode
+(add-hook 'nrepl-mode-hook 'smartparens-mode)
 
 ;; load lang-specific hooks
 (load-file "~/.emacs.d/personal/langs.el")

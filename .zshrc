@@ -5,7 +5,7 @@ ZSH=$HOME/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="agnoster"
+ZSH_THEME="af-magic"
 DEFAULT_USER="zeeshanlakhani"
 
 # Comment this out to disable bi-weekly auto-update checks
@@ -31,7 +31,7 @@ plugins=(git git-flow ruby rbenv coffee lein osx sublime)
 source $ZSH/oh-my-zsh.sh
 
 # exports and sets
-export PATH=/usr/local/bin:/usr/local:/usr/local/sbin:/usr/local/share/python:~/.cabal/bin:~/julia:/usr/local/share/npm/bin:/Applications/Racket/bin:/usr/local/Cellar/smlnj/110.75/libexec/bin:~/bin:~/Applications/chromedriver:/usr/bin:/bin:/usr/sbin:/sbin
+export PATH=/usr/local/bin:/usr/local:/usr/local/sbin:~/.cabal/bin:~/julia:/usr/local/share/npm/bin:/Applications/Racket/bin:/usr/local/Cellar/smlnj/110.75/libexec/bin:~/bin:~/Applications/chromedriver:/usr/bin:/bin:/usr/sbin:/sbin
 export PYTHONPATH="/usr/local/lib/python2.7/site-packages:$PYTHONPATH"
 FC=/usr/local/bin/gfortran
 TERM=xterm-256color
@@ -56,8 +56,15 @@ alias gs='git status'
 alias ppj='python -m json.tool'
 alias subl-packages='~/Library/Application\ Support/Sublime\ Text\ 2/Packages'
 alias sml='rlwrap sml'
-alias emacst='emacsclient -t'
+alias emacst='emacsclient -t -a vim'
 alias spot="osascript ~/SpotifyControl/SpotifyControl.scpt"
+
+## readability aliases
+
+# To decrypt
+alias credd='openssl aes-256-cbc -d -a -in creds -out creds.txt'
+# to encrypt
+alias crede='openssl aes-256-cbc -a -salt -in creds.txt -out creds'
 
 # functions
 skill () {

@@ -71,11 +71,9 @@
     module are offered.
 
     While that is cool and all, things are even better: if you have
-    company-mode (http://nschum.de/src/emacs/company-mode/) installed,
+    company-mode (http://company-mode.github.io/) installed,
     Geiser's completion will use it. Just require company-mode and,
-    from then on, any new scheme buffer or REPL will use it. If you
-    didn't know about Nikolaj Schumacher's awesome mode, check this
-    screencast: http://goo.gl/yxLQ.
+    from then on, any new scheme buffer or REPL will use it.
 
 * Quick key reference
 
@@ -97,6 +95,8 @@
     | C-x C-e     | Eval sexp before point                          |
     | C-c C-r     | Eval region                                     |
     | C-c M-r     | Eval region and switch to REPL                  |
+    | C-c C-b     | Eval buffer                                     |
+    | C-c M-b     | Eval buffer and switch to REPL                  |
     |-------------+-------------------------------------------------|
     | C-c C-m x   | Macro-expand definition around point            |
     | C-c C-m e   | Macro-expand sexp before point                  |

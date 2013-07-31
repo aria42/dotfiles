@@ -20,6 +20,8 @@
 (require 'geiser-base)
 (require 'geiser)
 
+(eval-when-compile (require 'cl))
+
 
 ;;; Customization:
 
@@ -65,6 +67,11 @@ This executable is used by `run-gracket', and, if
   :type '(repeat string)
   :group 'geiser-racket)
 
+(geiser-custom--defcustom geiser-racket-case-sensitive-p t
+  "Non-nil means keyword highlighting is case-sensitive."
+  :type 'boolean
+  :group 'geiser-racket)
+
 
 ;;; REPL support:
 
@@ -84,22 +91,14 @@ This function uses `geiser-racket-init-file' if it exists."
                         (expand-file-name geiser-racket-init-file)))
         (binary (geiser-racket--real-binary))
         (rackdir (expand-file-name "racket/" geiser-scheme-dir)))
-    `("-i" "-q"
-      "-S" ,rackdir
+    `("-i" "-q" "-S" ,rackdir
       ,@(apply 'append (mapcar (lambda (p) (list "-S" p))
                                geiser-racket-collects))
       ,@(and (listp binary) (cdr binary))
       ,@(and init-file (file-readable-p init-file) (list "-f" init-file))
       "-f" ,(expand-file-name "geiser/startup.rkt" rackdir))))
 
-(defconst geiser-racket--prompt-regexp "\\(mzscheme\\|racket\\)@[^ ]*?> ")
-
-(defun geiser-racket--startup (remote)
-  (if geiser-image-cache-dir
-      (geiser-eval--send/wait
-       `(:eval (image-cache ,geiser-image-cache-dir) geiser/user))
-    (setq geiser-image-cache-dir
-          (geiser-eval--send/result '(:eval (image-cache) geiser/user)))))
+(defconst geiser-racket--prompt-regexp "\\(mzscheme\\|racket\\)@[^ ]*> ")
 
 
 ;;; Remote REPLs
@@ -116,18 +115,47 @@ using start-geiser, a procedure in the geiser/server module."
 
 ;;; Evaluation support:
 
+(defconst geiser-racket--module-re
+  "^(module[+*]? +\\([^ ]+\\)\\W+\\([^ ]+\\)?")
+
+(defun geiser-racket--explicit-module ()
+  (save-excursion
+    (ignore-errors
+      (while (not (zerop (geiser-syntax--nesting-level)))
+        (backward-up-list)))
+    (and (looking-at geiser-racket--module-re)
+         (let ((mod (match-string-no-properties 1))
+               (lang (match-string-no-properties 2)))
+           (cons (geiser-syntax--form-from-string mod)
+                 (geiser-syntax--form-from-string lang))))))
+
 (defun geiser-racket--language ()
+  (or (cdr (geiser-racket--explicit-module))
+      (save-excursion
+        (goto-char (point-min))
+        (if (re-search-forward "^#lang +\\([^ ]+\\)" nil t)
+            (geiser-syntax--form-from-string (match-string-no-properties 1))))
+      "#f"))
+
+(defun geiser-racket--implicit-module ()
   (save-excursion
     (goto-char (point-min))
-    (if (re-search-forward
-         "^\\(?:#lang\\|(module +[^ ]+?\\) +\\([^ ]+?\\|([^)]+)\\) *$" nil t)
-        (car (geiser-syntax--read-from-string (match-string-no-properties 1)))
-      "#f")))
+    (when (re-search-forward "^#lang " nil t)
+      (buffer-file-name))))
+
+(defun geiser-racket--find-module ()
+  (let ((bf (geiser-racket--implicit-module))
+        (sub (car (geiser-racket--explicit-module))))
+    (cond ((and (not bf) (not sub)) nil)
+          ((and (not bf) sub) sub)
+          (sub `(submod (file ,bf) ,sub))
+          (t bf))))
 
 (defun geiser-racket--enter-command (module)
-  (when (stringp module)
+  (when (or (stringp module) (listp module))
     (cond ((zerop (length module)) ",enter #f")
-          ((file-name-absolute-p module) (format ",enter %S" module))
+          ((or (listp module)
+               (file-name-absolute-p module)) (format ",enter %S" module))
           (t (format ",enter %s" module)))))
 
 (defun geiser-racket--geiser-procedure (proc &rest args)
@@ -138,33 +166,12 @@ using start-geiser, a procedure in the geiser/server module."
              (geiser-racket--language)
              (mapconcat 'identity (cdr args) " ")))
     ((load-file compile-file)
-     (format ",geiser-eval geiser/main racket (geiser:%s %s)"
-             proc (car args)))
+     (format ",geiser-load %S" (geiser-racket--find-module)))
     ((no-values) ",geiser-no-values")
     (t (format ",apply geiser:%s (%s)" proc (mapconcat 'identity args " ")))))
 
-(defconst geiser-racket--module-re
-  "^(module +\\([^ ]+\\)")
-
-(defun geiser-racket--explicit-module ()
-  (save-excursion
-    (goto-char (point-min))
-    (and (re-search-forward geiser-racket--module-re nil t)
-         (ignore-errors
-           (car (geiser-syntax--read-from-string
-                 (match-string-no-properties 1)))))))
-
-(defsubst geiser-racket--implicit-module ()
-  (save-excursion
-    (goto-char (point-min))
-    (if (re-search-forward "^#lang " nil t)
-        (buffer-file-name)
-      :f)))
-
 (defun geiser-racket--get-module (&optional module)
-  (cond ((and (null module) (buffer-file-name)))
-        ;; (geiser-racket--explicit-module)
-        ((null module) (geiser-racket--implicit-module))
+  (cond ((null module) (or (geiser-racket--find-module) :f))
         ((symbolp module) module)
         ((and (stringp module) (file-name-absolute-p module)) module)
         ((stringp module) (make-symbol module))
@@ -198,17 +205,19 @@ using start-geiser, a procedure in the geiser/server module."
 ;;; External help
 
 (defsubst geiser-racket--get-help (symbol module)
-  (geiser-eval--send/wait
-   `(:eval (get-help ',symbol '(:module ,module)) geiser/autodoc)))
+  (geiser-eval--send/wait `(:scm ,(format ",help %s %s" symbol module))))
 
 (defun geiser-racket--external-help (id module)
   (message "Looking up manual for '%s'..." id)
-  (let ((out (geiser-eval--retort-output
-              (geiser-racket--get-help id module))))
-    (when (and out (string-match " but provided by:\n +\\(.+\\)\n" out))
-      (geiser-racket--get-help id (match-string 1 out))))
-  (minibuffer-message "%s done" (current-message))
-  t)
+  (let* ((ret (geiser-racket--get-help id (format "%S" module)))
+         (out (geiser-eval--retort-output ret))
+         (ret (if (and out (string-match " but provided by:\n +\\(.+\\)\n" out))
+                  (geiser-racket--get-help id (match-string 1 out))
+                ret)))
+    (unless (string-match "^Sending to web browser.+"
+                          (geiser-eval--retort-output ret))
+      (minibuffer-message "%s not found" (current-message)))
+    t))
 
 
 ;;; Error display
@@ -219,7 +228,7 @@ using start-geiser, a procedure in the geiser/server module."
     "module: \"\\([^>\"\n]+\\)\""))
 
 (defconst geiser-racket--geiser-file-rx
-  (format "^%s/?racket/geiser" (regexp-quote geiser-scheme-dir)))
+  (format "^ *%s/?racket/geiser" (regexp-quote geiser-scheme-dir)))
 
 (defun geiser-racket--purge-trace ()
   (save-excursion
@@ -254,9 +263,15 @@ using start-geiser, a procedure in the geiser/server module."
 
 ;;; Keywords and syntax
 
+(setq geiser-racket-font-lock-forms
+  '(("^#lang\\>" . 0)
+    ("\\[\\(else\\)\\>" . 1)
+    ("(\\(define/match\\)\\W+[[(]?\\(\\w+\\)+\\b"
+     (1 font-lock-keyword-face)
+     (2 font-lock-function-name-face))))
+
 (defun geiser-racket--keywords ()
-  (append '(("^#lang\\>" . 0)
-            ("\\[\\(else\\)\\>" . 1))
+  (append geiser-racket-font-lock-forms
           (when geiser-racket-extra-keywords
             `((,(format "[[(]%s\\>" (regexp-opt geiser-racket-extra-keywords 1))
                . 1)))))
@@ -280,6 +295,9 @@ using start-geiser, a procedure in the geiser/server module."
  (for*/lists 2)
  (for*/or 1)
  (for*/product 1)
+ (for*/set 1)
+ (for*/seteq 1)
+ (for*/seteqv 1)
  (for*/sum 1)
  (for*/vector 1)
  (for/and 1)
@@ -293,6 +311,9 @@ using start-geiser, a procedure in the geiser/server module."
  (for/lists 2)
  (for/or 1)
  (for/product 1)
+ (for/set 1)
+ (for/seteq 1)
+ (for/seteqv 1)
  (for/sum 1)
  (for/vector 1)
  (instantiate 2)
@@ -308,9 +329,12 @@ using start-geiser, a procedure in the geiser/server module."
  (letrec: 1)
  (local 1)
  (match-let 1)
+ (match-let-values 1)
+ (match/values 1)
  (mixin 2)
  (module defun)
  (module+ defun)
+ (module* defun)
  (parameterize-break 1)
  (quasisyntax/loc 1)
  (send* 1)
@@ -333,6 +357,19 @@ using start-geiser, a procedure in the geiser/server module."
  (with-handlers 1)
  (with-handlers: 1))
 
+
+;;; Startup
+
+(defun geiser-racket--startup (remote)
+  (set (make-local-variable 'compilation-error-regexp-alist)
+       `(("^ *\\([^:(\t\n]+\\):\\([0-9]+\\):\\([0-9]+\\):" 1 2 3)))
+  (compilation-setup t)
+  (if geiser-image-cache-dir
+      (geiser-eval--send/wait
+       `(:eval (image-cache ,geiser-image-cache-dir) geiser/user))
+    (setq geiser-image-cache-dir
+          (geiser-eval--send/result '(:eval (image-cache) geiser/user)))))
+
 
 
 ;;; Implementation definition:
@@ -353,6 +390,7 @@ using start-geiser, a procedure in the geiser/server module."
   (external-help geiser-racket--external-help)
   (check-buffer geiser-racket--guess)
   (keywords geiser-racket--keywords)
+  (case-sensitive geiser-racket-case-sensitive-p)
   (binding-forms geiser-racket--binding-forms)
   (binding-forms* geiser-racket--binding-forms*))
 

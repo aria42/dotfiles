@@ -1,6 +1,6 @@
 ;;; geiser-repl.el --- Geiser's REPL
 
-;; Copyright (C) 2009, 2010, 2011, 2012 Jose Antonio Ortega Ruiz
+;; Copyright (C) 2009, 2010, 2011, 2012, 2013 Jose Antonio Ortega Ruiz
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the Modified BSD License. You should
@@ -62,9 +62,9 @@ implementation name gets appended to it."
   :group 'geiser-repl)
 
 (geiser-custom--defcustom geiser-repl-history-no-dups-p t
-   "Whether to skip duplicates when recording history."
-   :type 'boolean
-   :group 'geiser-repl)
+  "Whether to skip duplicates when recording history."
+  :type 'boolean
+  :group 'geiser-repl)
 
 (geiser-custom--defcustom geiser-repl-save-debugging-history-p nil
   "Whether to skip debugging input in REPL history.
@@ -107,6 +107,12 @@ expression, if any."
 
 (geiser-custom--defcustom geiser-repl-query-on-exit-p nil
   "Whether to prompt for confirmation on \\[geiser-repl-exit]."
+  :type 'boolean
+  :group 'geiser-repl)
+
+(geiser-custom--defcustom geiser-repl-query-on-kill-p t
+  "Whether to prompt for confirmation when killing a REPL buffer with
+a life process."
   :type 'boolean
   :group 'geiser-repl)
 
@@ -328,6 +334,8 @@ module command as a string")
               'geiser-repl--output-filter
               nil
               t)
+    (set-process-query-on-exit-flag (get-buffer-process (current-buffer))
+                                    geiser-repl-query-on-kill-p)
     (message "%s up and running!" (geiser-repl--repl-name impl))))
 
 (defun geiser-repl--start-scheme (impl address prompt)
@@ -368,12 +376,15 @@ module command as a string")
                               (overlay-end comint-last-prompt-overlay)
                               t)))))
 
-(defun geiser-repl--connection ()
+(defun geiser-repl--connection* ()
   (let ((buffer (geiser-repl--set-up-repl geiser-impl--implementation)))
-    (or (and (buffer-live-p buffer)
-             (get-buffer-process buffer)
-             (with-current-buffer buffer geiser-repl--connection))
-        (error "No Geiser REPL for this buffer (try M-x run-geiser)"))))
+   (and (buffer-live-p buffer)
+        (get-buffer-process buffer)
+        (with-current-buffer buffer geiser-repl--connection))))
+
+(defun geiser-repl--connection ()
+  (or (geiser-repl--connection*)
+      (error "No Geiser REPL for this buffer (try M-x run-geiser)")))
 
 (setq geiser-eval--default-connection-function 'geiser-repl--connection)
 
@@ -393,19 +404,21 @@ module command as a string")
 
 ;;; REPL history
 
-(defconst geiser-repl--history-separator "\n\0\n")
+(defconst geiser-repl--history-separator "\n}{\n")
 
 (defsubst geiser-repl--history-file ()
   (format "%s.%s" geiser-repl-history-filename geiser-impl--implementation))
 
 (defun geiser-repl--read-input-ring ()
   (let ((comint-input-ring-file-name (geiser-repl--history-file))
-        (comint-input-ring-separator geiser-repl--history-separator))
+        (comint-input-ring-separator geiser-repl--history-separator)
+        (buffer-file-coding-system 'utf-8))
     (comint-read-input-ring t)))
 
 (defun geiser-repl--write-input-ring ()
   (let ((comint-input-ring-file-name (geiser-repl--history-file))
-        (comint-input-ring-separator geiser-repl--history-separator))
+        (comint-input-ring-separator geiser-repl--history-separator)
+        (buffer-file-coding-system 'utf-8))
     (comint-write-input-ring)))
 
 (defun geiser-repl--history-setup ()
@@ -514,15 +527,28 @@ module command as a string")
     (narrow-to-region (geiser-repl--last-prompt-end) (point-max))
     (geiser-syntax--nesting-level)))
 
+(defun geiser-repl--mark-input-bounds (beg end)
+  (add-text-properties beg end '(field t)))
+
+(defun geiser-repl--is-history-input ()
+  (get-text-property (if (eolp) (save-excursion (comint-bol)) (point)) 'field))
+
+(defun geiser-repl--grab-input ()
+  (let ((pos (comint-bol)))
+    (goto-char (point-max))
+    (insert (field-string-no-properties pos))))
+
 (defun geiser-repl--send-input ()
   (let* ((proc (get-buffer-process (current-buffer)))
          (pmark (and proc (process-mark proc)))
-         (intxt (and pmark (buffer-substring pmark (point)))))
+         (intxt (and pmark (buffer-substring pmark (point))))
+	 (eob (point-max)))
     (when intxt
       (and geiser-repl-forget-old-errors-p
            (not (geiser-repl--is-debugging))
            (compilation-forget-errors))
       (geiser-repl--prepare-send)
+      (geiser-repl--mark-input-bounds pmark eob)
       (comint-send-input)
       (when (string-match "^\\s-*$" intxt)
         (comint-send-string proc (geiser-eval--scheme-str '(:ge no-values)))
@@ -532,7 +558,9 @@ module command as a string")
   (interactive)
   (let ((p (point)))
     (cond ((< p (geiser-repl--last-prompt-start))
-           (ignore-errors (compile-goto-error)))
+	   (if (geiser-repl--is-history-input)
+	       (geiser-repl--grab-input)
+	     (ignore-errors (compile-goto-error))))
           ((progn (end-of-line) (<= (geiser-repl--nesting-level) 0))
            (geiser-repl--send-input))
           (t (goto-char p)
@@ -583,6 +611,7 @@ buffer."
   (geiser-completion--setup t)
   (setq geiser-smart-tab-mode-string "")
   (geiser-smart-tab-mode t)
+  (geiser-syntax--add-kws)
   ;; enabling compilation-shell-minor-mode without the annoying highlighter
   (compilation-setup t))
 
@@ -668,6 +697,7 @@ buffer."
 
 (defun switch-to-geiser (&optional ask impl buffer)
   "Switch to running Geiser REPL.
+
 With prefix argument, ask for which one if more than one is running.
 If no REPL is running, execute `run-geiser' to start a fresh one."
   (interactive "P")

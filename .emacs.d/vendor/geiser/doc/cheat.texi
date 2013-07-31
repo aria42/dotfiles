@@ -42,6 +42,9 @@ third key not modified by @key{Control}; e.g.,
 @item C-c C-e C-[
 @tab @code{geiser-squarify}
 @tab Toggle between () and [] for current form
+@item C-c C-\
+@tab @code{geiser-insert-lambda}
+@tab Insert greek lambda or, with prefix, a lambda form
 @item @tab @tab
 @item C-M-x
 @tab @code{geiser-eval-definition}
@@ -58,6 +61,12 @@ third key not modified by @key{Control}; e.g.,
 @item C-c M-r
 @tab @code{geiser-eval-region-and-go}
 @tab Eval region and switch to REPL
+@item C-c C-b
+@tab @code{geiser-eval-buffer}
+@tab Eval buffer
+@item C-c M-b
+@tab @code{geiser-eval-buffer-and-go}
+@tab Eval buffer and switch to REPL
 @item @tab @tab
 @item C-c C-m C-x
 @tab @code{geiser-expand-definition}
