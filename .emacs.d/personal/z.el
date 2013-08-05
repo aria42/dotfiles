@@ -178,7 +178,7 @@
 (defalias 'ack-find-file-same 'ack-and-a-half-find-file-same)
 
 ;; helm shorcut
-(global-set-key (kbd "C-x C-d") 'helm-prelude)
+(global-set-key (kbd "C-x C-d") 'helm-mini)
 
 ;; surpress killing confirms
 (defadvice save-buffers-kill-emacs (around no-query-kill-emacs activate)
