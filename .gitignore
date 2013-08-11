@@ -1,4 +1,4 @@
 setup.sh
 flycheck-custom.el
 .projectile
-*logs*
+*logs/*

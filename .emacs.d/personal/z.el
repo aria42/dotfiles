@@ -221,6 +221,13 @@
 (add-to-list 'auto-mode-alist '("Podfile$" . ruby-mode)) ;; support Podfiles
 (add-to-list 'auto-mode-alist '("\\.podspec$" . ruby-mode)) ;; support Podspecs
 
+;; rubyisms
+(add-to-list 'auto-mode-alist '("Gemfile" . ruby-mode))
+(add-to-list 'auto-mode-alist '("Rakefile" . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.rake\\'" . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.rb\\'" . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.ru\\'" . ruby-mode))
+
 ;; processing
 (add-to-list 'auto-mode-alist '("\\.pde$" . processing-mode))
 (setq processing-location "/usr/bin/processing-java")
@@ -230,6 +237,9 @@
 ;; other file-exts for clojure-mode
 (setq auto-mode-alist (cons '("\\.edn$" . clojure-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.cljs$" . clojure-mode) auto-mode-alist))
+
+;; clojure cheatsheet
+(load-file "~/.emacs.d/vendor/clojure-cheatsheet/clojure-cheatsheet.el")
 
 ;; nREPL customizations
 
@@ -247,6 +257,19 @@
 (add-hook 'nrepl-mode-hook 'subword-mode)
 ; enable nrepl smartparens mode
 (add-hook 'nrepl-mode-hook 'smartparens-mode)
+
+(require 'ac-nrepl)
+(add-hook 'nrepl-mode-hook 'ac-nrepl-setup)
+(add-hook 'nrepl-interaction-mode-hook 'ac-nrepl-setup)
+(eval-after-load "auto-complete"
+  '(add-to-list 'ac-modes 'nrepl-mode))
+
+(defun set-auto-complete-as-completion-at-point-function ()
+  (setq completion-at-point-functions '(auto-complete)))
+(add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)
+
+(add-hook 'nrepl-mode-hook 'set-auto-complete-as-completion-at-point-function)
+(add-hook 'nrepl-interaction-mode-hook 'set-auto-complete-as-completion-at-point-function)
 
 ;; load lang-specific hooks
 (load-file "~/.emacs.d/personal/langs.el")
