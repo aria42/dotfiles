@@ -25,3 +25,5 @@ projectile-bookmarks.eld
 .sass-cache
 projectile-bookmarks.eld
 session*
+*logs*
+.cask

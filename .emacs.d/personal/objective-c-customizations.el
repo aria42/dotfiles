@@ -34,8 +34,9 @@
                                         ac-source-gtags)
                                       ac-sources)))
   ;; Setup indentation
-  (setq-default indent-tabs-mode nil)
-  (setq-default c-basic-offset 4)
+  (setq indent-tabs-mode nil)
+  (setq c-basic-offset 4)
+  (setq c-indent-level 4)
   (c-set-offset 'brace-list-close '-)
   (c-set-offset 'brace-list-intro '0)
   (c-set-offset 'arglist-close '0)

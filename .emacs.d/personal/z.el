@@ -47,6 +47,9 @@
 ;; Makes emacs load much faster inside git repos
 (setq vc-handled-backends nil)
 
+;; disable chord mode
+(key-chord-mode -1)
+
 ;; switch windows with fun
 (global-set-key (kbd "C-x <up>") 'windmove-up)
 (global-set-key (kbd "C-x <down>") 'windmove-down)
