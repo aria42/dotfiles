@@ -11,8 +11,8 @@
                                      melpa nginx-mode nrepl org paredit pcache popup
                                      projectile rainbow-delimiters rainbow-mode sass-mode
                                      scss-mode simple-httpd skewer-mode spotify tree-mode
-                                     undo-tree volatile-highlights zenburn-theme icicles
-                                     processing-mode smartparens))
+                                     undo-tree volatile-highlights icicles
+                                     processing-mode zenburn-theme))
 
 ;; no tabs, normally
 (setq-default indent-tabs-mode nil)
@@ -47,8 +47,9 @@
 ;; Makes emacs load much faster inside git repos
 (setq vc-handled-backends nil)
 
-;; disable chord mode
-(key-chord-mode -1)
+;; change-up chord mode
+(key-chord-define-global "jj" nil)
+(key-chord-define-global "uu" nil)
 
 ;; switch windows with fun
 (global-set-key (kbd "C-x <up>") 'windmove-up)
@@ -258,8 +259,6 @@
 (add-to-list 'same-window-buffer-names "*nrepl*")
 ; enable camelcase for editing commands
 (add-hook 'nrepl-mode-hook 'subword-mode)
-; enable nrepl smartparens mode
-(add-hook 'nrepl-mode-hook 'smartparens-mode)
 
 (require 'ac-nrepl)
 (add-hook 'nrepl-mode-hook 'ac-nrepl-setup)
