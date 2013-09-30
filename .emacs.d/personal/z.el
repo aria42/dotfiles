@@ -247,6 +247,9 @@
 
 ;; nREPL customizations
 
+(autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
+(add-hook 'clojure-mode-hook 'paredit-mode)
+
 ; Don't aggressively popup stacktraces
 (setq nrepl-popup-stacktraces nil)
 ; Display stacktrace inline
@@ -255,10 +258,13 @@
 (add-hook 'nrepl-interaction-mode-hook 'nrepl-turn-on-eldoc-mode)
 ; Use paredit in *nrepl* buffer
 (add-hook 'nrepl-mode-hook 'paredit-mode)
+(add-hook 'nrepl-repl-mode-hook 'paredit-mode)
 ; Make C-c C-z switch to *nrepl*
 (add-to-list 'same-window-buffer-names "*nrepl*")
 ; enable camelcase for editing commands
 (add-hook 'nrepl-mode-hook 'subword-mode)
+; rainbow-delim
+(add-hook 'nrepl-repl-mode-hook 'rainbow-delimiters-mode)
 
 (require 'ac-nrepl)
 (add-hook 'nrepl-mode-hook 'ac-nrepl-setup)
