@@ -11,14 +11,17 @@
                                      melpa nginx-mode nrepl org paredit pcache popup
                                      projectile rainbow-delimiters rainbow-mode sass-mode
                                      scss-mode simple-httpd skewer-mode spotify tree-mode
-                                     undo-tree volatile-highlights icicles
-                                     processing-mode zenburn-theme))
+                                     undo-tree volatile-highlights icicles nyan-prompt
+                                     processing-mode zenburn-theme pretty-mode))
 
 ;; no tabs, normally
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 (setq indent-line-function 'insert-tab)
 (setq c-basic-offset 4)
+
+;; pretty
+(global-pretty-mode 1)
 
 ;; arrows come back
 (setq prelude-guru nil)

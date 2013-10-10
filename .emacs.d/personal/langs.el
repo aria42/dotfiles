@@ -10,10 +10,10 @@
           '(lambda ()
              (setq js-indent-level 2)))
 
-(add-hook 'python-mode-hook
-          'flymake-python-pyflakes-load
-          '(lambda ()
-             (setq flymake-number-of-errors-to-display nil)))
+;;(add-hook 'python-mode-hook
+;;          'flymake-python-pyflakes-load
+;;          '(lambda ()
+;;             (setq flymake-number-of-errors-to-display nil)))
 
 (setq js2-mode-hook
       '(lambda () ((progn)

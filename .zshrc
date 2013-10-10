@@ -31,7 +31,7 @@ plugins=(git git-flow ruby rbenv coffee lein osx sublime)
 source $ZSH/oh-my-zsh.sh
 
 # exports and sets
-export PATH=/usr/local/bin:/usr/local:/usr/local/sbin:~/.cabal/bin:~/julia:/usr/local/share/npm/bin:/Applications/Racket/bin:/usr/local/Cellar/smlnj/110.75/libexec/bin:~/bin:~/Applications/chromedriver:/usr/bin:/bin:/usr/sbin:/sbin:~/GoogleDrive/experiments/haskell-ios/ghc-ios-scripts
+export PATH=/usr/local/bin:/usr/local:/usr/local/sbin:~/.cabal/bin:~/julia:/usr/local/share/npm/bin:/Applications/Racket/bin:/usr/local/Cellar/smlnj/110.75/libexec/bin:~/bin:~/Applications/chromedriver:/usr/bin:/bin:/usr/sbin:/sbin:~/GoogleDrive/experiments/haskell-ios/ghc-ios-scripts:~/GoogleDrive/things/grench-0.2.0-mac
 export PYTHONPATH="/usr/local/lib/python2.7/site-packages:$PYTHONPATH"
 FC=/usr/local/bin/gfortran
 TERM=xterm-256color
@@ -90,3 +90,6 @@ fortune | cowsay -f ghostbusters
 
 # Disable AutoCorrect
 unsetopt correct_all
+
+# OPAM configuration
+. /Users/zeeshanlakhani/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
