@@ -1,18 +1,25 @@
 ;; packages that must be installed via package-manager
-(prelude-ensure-module-deps '(ac-js2 ac-math ac-nrepl ace-jump-mode
+(prelude-ensure-module-deps '(ac-js2 ac-nrepl ace-jump-mode ac-math clojure-test-mode
                                      ack-and-a-half android-mode cl-lib clojure-mode
-                                     clojure-test-mode color-theme color-theme-solarized
+                                     color-theme color-theme-solarized
                                      dash diminish dummy-h-mode erc-hl-nicks erlang ctags
                                      exec-path-from-shell expand-region flymake-easy ctags-update
                                      flymake-haskell-multi flymake-json flyspell-lazy sml-mode
                                      gh gist git-commit-mode gitconfig-mode gitignore-mode
                                      go-autocomplete go-mode guru-mode haml-mode haskell-mode
                                      helm helm-projectile js2-mode logito lua-mode magit
-                                     melpa nginx-mode nrepl org paredit pcache popup
+                                     melpa nginx-mode cider org paredit pcache popup
                                      projectile rainbow-delimiters rainbow-mode sass-mode
                                      scss-mode simple-httpd skewer-mode spotify tree-mode
                                      undo-tree volatile-highlights icicles nyan-prompt
                                      processing-mode zenburn-theme pretty-mode))
+
+
+;; add marmelade
+(require 'package)
+(add-to-list 'package-archives
+             '("marmalade" . "http://marmalade-repo.org/packages/"))
+(package-initialize)
 
 ;; no tabs, normally
 (setq-default indent-tabs-mode nil)
@@ -248,26 +255,31 @@
 ;; clojure cheatsheet
 (load-file "~/.emacs.d/vendor/clojure-cheatsheet/clojure-cheatsheet.el")
 
-;; nREPL customizations
+;; nREPL/cider customizations
 
 (autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
 (add-hook 'clojure-mode-hook 'paredit-mode)
 
+; hide extra buffers
+(setq cider-hide-special-buffers t)
+; enable eldoc
+(add-hook 'cider-interaction-mode-hook 'cider-turn-on-eldoc-mode)
+; prevent auto-display of repl buffer
+(setq cider-repl-pop-to-buffer-on-connect nil)
 ; Don't aggressively popup stacktraces
-(setq nrepl-popup-stacktraces nil)
+(setq cider-popup-stacktraces nil)
 ; Display stacktrace inline
-; (setq nrepl-popup-stacktraces-in-repl t)
-; Enable eldoc - shows fn argument list in echo area
-(add-hook 'nrepl-interaction-mode-hook 'nrepl-turn-on-eldoc-mode)
+; (setq cider-popup-stacktraces-in-repl t)
 ; Use paredit in *nrepl* buffer
-(add-hook 'nrepl-mode-hook 'paredit-mode)
-(add-hook 'nrepl-repl-mode-hook 'paredit-mode)
-; Make C-c C-z switch to *nrepl*
-(add-to-list 'same-window-buffer-names "*nrepl*")
+(add-hook 'cider-repl-mode-hook 'paredit-mode)
 ; enable camelcase for editing commands
-(add-hook 'nrepl-mode-hook 'subword-mode)
+(add-hook 'cider-repl-mode-hook 'subword-mode)
 ; rainbow-delim
-(add-hook 'nrepl-repl-mode-hook 'rainbow-delimiters-mode)
+(add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)
+; c-c c-z swith to current window
+(add-to-list 'same-window-buffer-names "*cider*")
+; autoselect error buffer
+(setq cider-auto-select-error-buffer t)
 
 (require 'ac-nrepl)
 (add-hook 'nrepl-mode-hook 'ac-nrepl-setup)
