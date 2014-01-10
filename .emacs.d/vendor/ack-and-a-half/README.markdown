@@ -35,10 +35,12 @@ Contributors
 Many thanks to the following people for their contributions:
 
 * Alexey Lebedeff
+* Andrew Pennebaker
 * Andrew Stine
 * Derek Chen-Becker
 * Gleb Peregud
 * Kim van Wyk
+* Lars Andersen
 * Ronaldo M. Ferraz
 * Ryan Thompson
 * Simão Mata

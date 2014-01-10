@@ -1,7 +1,20 @@
-* Version 0.5 ()
+* Version 0.5.1
+
+  Bug fixes:
+
+   - Better support for Typed Racket: (re)definitions now work for
+     typed/racket modules (thanks to Sam Tobin-Hochstadt).
+   - Better behaviour for geiser-eval-buffer in racket
+     buffers that contain a #lang directive.  But you'd better use C-c
+     C-k instead.
+
+* Version 0.5 (Dec 9, 2013)
 
   New features:
 
+   - Geiser is now available from MELPA, with the help of Steve Purcell.
+   - Racket: new commands geiser-racket-{show, hide, toggle}-submodules,
+     for folding submodule forms in code buffers.
    - Racket: interaction with submodules (entering them and evaluation
      within their scope).
    - New commands geiser-eval-buffer (C-c C-b) and
@@ -9,7 +22,8 @@
    - Pressing return on a previous expression in the REPL will resend
      it, by Darren Hoo.
    - Improvements to syntax highlighting (define/match in racket).
-
+   - Version checks for the underlying Scheme process, thanks to an
+     idea of B Batsov.
 
   Bug fixes:
 
@@ -18,6 +32,10 @@
      chars: all UTF-8 characters should be fair game now.
    - Fixed problems with geiser-doc's history being handled by
      session.el (by not letting the latter handle it).
+   - Paths in `geiser-load-path' are now also added to
+     `%load-compiled-path'.  Ditto for paths added via
+     `geiser-add-to-load-path`.
+   - Compatibility fixes for Emacs snapshots.
 
 * Version 0.4 (May 2, 2013)
 

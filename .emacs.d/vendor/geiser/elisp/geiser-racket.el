@@ -1,6 +1,6 @@
 ;; geiser-racket.el -- geiser support for Racket scheme
 
-;; Copyright (C) 2009, 2010, 2011, 2012, 2013 Jose Antonio Ortega Ruiz
+;; Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014 Jose Antonio Ortega Ruiz
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the Modified BSD License. You should
@@ -137,11 +137,14 @@ using start-geiser, a procedure in the geiser/server module."
             (geiser-syntax--form-from-string (match-string-no-properties 1))))
       "#f"))
 
-(defun geiser-racket--implicit-module ()
+(defun geiser-racket--implicit-module (&optional pos)
   (save-excursion
     (goto-char (point-min))
     (when (re-search-forward "^#lang " nil t)
-      (buffer-file-name))))
+      (if pos (progn (end-of-line) (list (point))) (buffer-file-name)))))
+
+(defun geiser-racket--eval-bounds ()
+  (geiser-racket--implicit-module t))
 
 (defun geiser-racket--find-module ()
   (let ((bf (geiser-racket--implicit-module))
@@ -358,7 +361,12 @@ using start-geiser, a procedure in the geiser/server module."
  (with-handlers: 1))
 
 
-;;; Startup
+;;; REPL Startup
+
+(defvar geiser-racket-minimum-version "5.3")
+
+(defun geiser-racket--version (binary)
+  (shell-command-to-string (format "%s  -e '(display (version))'" binary)))
 
 (defun geiser-racket--startup (remote)
   (set (make-local-variable 'compilation-error-regexp-alist)
@@ -370,6 +378,41 @@ using start-geiser, a procedure in the geiser/server module."
     (setq geiser-image-cache-dir
           (geiser-eval--send/result '(:eval (image-cache) geiser/user)))))
 
+
+;;; Additional commands
+
+(defvar geiser-racket--submodule-history ())
+
+(defun geiser-racket--submodule-form (name)
+  (format "module[+*]? %s"
+          (cond ((eq 1 name) "")
+                ((numberp name)
+                 (read-string "Submodule name: " nil
+                              'geiser-racket--submodule-history))
+                ((stringp name) name)
+                (t ""))))
+
+(defun geiser-racket-toggle-submodules (&optional name)
+  "Toggle visibility of submodule forms.
+
+Use a prefix to be asked for a submodule name."
+  (interactive "p")
+  (geiser-edit--toggle-visibility (geiser-racket--submodule-form name)))
+
+(defun geiser-racket-show-submodules (&optional name)
+  "Unconditionally shows all submodule forms.
+
+Use a prefix to be asked for a submodule name."
+  (interactive "p")
+  (cond ((eq 1 name) (geiser-edit--show-all))
+        (t (geiser-edit--show (geiser-racket--submodule-form name)))))
+
+(defun geiser-racket-hide-submodules (&optional name)
+  "Unconditionally hides all visible submodules.
+
+Use a prefix to be asked for a submodule name."
+  (interactive "p")
+  (geiser-edit--hide (geiser-racket--submodule-form name)))
 
 
 ;;; Implementation definition:
@@ -377,6 +420,8 @@ using start-geiser, a procedure in the geiser/server module."
 (define-geiser-implementation racket
   (unsupported-procedures '(callers callees generic-methods))
   (binary geiser-racket--binary)
+  (minimum-version geiser-racket-minimum-version)
+  (version-command geiser-racket--version)
   (arglist geiser-racket--parameters)
   (repl-startup geiser-racket--startup)
   (prompt-regexp geiser-racket--prompt-regexp)
@@ -386,6 +431,7 @@ using start-geiser, a procedure in the geiser/server module."
   (import-command geiser-racket--import-command)
   (exit-command geiser-racket--exit-command)
   (find-symbol-begin geiser-racket--symbol-begin)
+  (eval-bounds geiser-racket--eval-bounds)
   (display-error geiser-racket--display-error)
   (external-help geiser-racket--external-help)
   (check-buffer geiser-racket--guess)

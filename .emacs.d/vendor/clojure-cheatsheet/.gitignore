@@ -1,3 +1,5 @@
-/helm-clojure-cheatsheet-autoloads.el
 *.elc
 /clojure-cheatsheet-autoloads.el
+/target/repl-port
+/target/stale/extract-native.dependencies
+/.nrepl-port

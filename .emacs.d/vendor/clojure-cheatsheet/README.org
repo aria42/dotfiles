@@ -21,16 +21,18 @@ install that in your preferred way.
    
 Call =M-x clojure-cheatsheet= and the cheatsheet will appear. Type
 in some terms (space separated) to narrow down the list. For example,
-try typing in =sort map= to some functions that deal with sorting maps.
+try typing in =sort map= to see some functions that deal with sorting maps.
 
 *** Keys
 
-| =C-n= | Next item.                                                                         |
-| =C-p= | Previous item.                                                                     |
-| =C-o= | Next section.                                                                      |
-| =RET= | Jump to the Clojure docs for the current selection.                                |
-| =C-z= | Jump to the Clojure docs for the current selection /without closing the cheatsheet/. |
-| =TAB= | View alternative actions.                                                          |
+| =C-n=   | Next item.                                                                         |
+| =C-p=   | Previous item.                                                                     |
+| =C-o=   | Next section.                                                                      |
+| =RET=   | Jump to the Clojure docs for the current selection.                                |
+| =C-z=   | Jump to the Clojure docs for the current selection /without closing the cheatsheet/. |
+| =C-e=   | Jump to the Clojure src for the current selection.                                 |
+| =C-h m= | Full list of keyboard shortcuts.                                                   |
+
 ** Advanced Usage
 
 This package stands on top of Helm. The variable
@@ -40,3 +42,6 @@ as a Helm source.
 ** Status
 
 Ready to use. Based on Clojure 1.5.1. Feedback welcomed.
+** See Also
+If you like this, and you like org-mode, then you'll probably like
+[[https://github.com/emacs-helm/helm-orgcard][helm-orgcard]] too...

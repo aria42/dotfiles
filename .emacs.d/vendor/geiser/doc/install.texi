@@ -47,24 +47,24 @@ where to find the goodies.
 
 ELPA packages live in repositories accessible via HTTP.  You can find
 Geiser's package either in @uref{http://marmalade-repo.org, Marmalade}
-or in Geiser's repository, located at
-@code{http://download.savannah.gnu.org/releases/geiser/packages}.  To
-tell Emacs that a repo exists, you add it to @code{package-archives}:
+(for releases) or in @uref{http://melpa.milkbox.net, MELPA} (for the
+unstable version directly from the git repo).  To tell Emacs that a repo
+exists, you add it to @code{package-archives}:
 
 @example
 (require 'package)
 (add-to-list 'package-archives
   '("marmalade" . "http://marmalade-repo.org/packages/"))
-;; You don't need this one if you have marmalade:
+;; You don't need this one if you prefer marmalade and released versions:
 ;; (add-to-list 'package-archives
-;;  '("geiser" . "http://download.savannah.gnu.org/releases/geiser/packages"))
+;;  '("melpa" . "http://melpa.milkbox.net/packages/"))
 (package-initialize)
 @end example
 
 And then installing Geiser is as easy as:
 
 @example
-M-x install-package RET geiser RET
+M-x package-install RET geiser RET
 @end example
 
 Alternatively, you can manually download the @uref{@value{PACKAGE},
@@ -214,6 +214,8 @@ the next chapter!
 Although Geiser does not need them, it plays well with (and is enhanced
 by) the following Emacs packages:
 
+@cindex ac-geiser
+@cindex autocomplete
 @cindex paredit
 @cindex company
 @cindex quack
@@ -227,6 +229,13 @@ editing mode.
 Nikolaj Schumacher's and Dmitry Gutov's @code{company-mode} provides a
 generic front-end for completion engines (such as Geiser's), with pretty
 and automatic completion lists.
+@item @uref{https://github.com/xiaohanyu/ac-geiser/, ac-geiser}
+If you prefer @code{auto-complete-mode} to @code{company-mode}, Xiao
+Hanyu's @code{ac-geiser}, which provides a Geiser plugin for the
+popular @uref{http://cx4a.org/software/auto-complete/, Emacs Auto
+Completion Mode}, is the package for you.  Like Geiser,
+@code{ac-geiser} is available in Marmalade and MELPA, and also as an
+@code{el-get} package.
 @item @uref{http://www.neilvandyke.org/quack/, Quack}.
 You can still use the many goodies provided by Neil van Dyke's
 @code{quack-mode}, since most of them are not (yet) available in Geiser.

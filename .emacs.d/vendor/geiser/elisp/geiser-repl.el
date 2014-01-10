@@ -105,6 +105,16 @@ expression, if any."
   :type 'boolean
   :group 'geiser-repl)
 
+(geiser-custom--defcustom geiser-repl-skip-version-check-p nil
+  "Whether to skip version checks for the Scheme executable.
+
+When set, Geiser won't check the version of the Scheme
+interpreter when starting a REPL, saving a few tenths of a
+second.
+"
+  :type 'boolean
+  :group 'geiser-repl)
+
 (geiser-custom--defcustom geiser-repl-query-on-exit-p nil
   "Whether to prompt for confirmation on \\[geiser-repl-exit]."
   :type 'boolean
@@ -188,6 +198,13 @@ module command as a string")
 (geiser-impl--define-caller geiser-repl--exit-cmd exit-command ()
   "Function returning the REPL exit command as a string")
 
+(geiser-impl--define-caller geiser-repl--version version-command (binary)
+  "Function returning the version of the corresponding scheme process,
+   given its full path.")
+
+(geiser-impl--define-caller geiser-repl--min-version minimum-version ()
+  "A variable providing the minimum required scheme version, as a string.")
+
 
 ;;; Geiser REPL buffers and processes:
 
@@ -266,6 +283,23 @@ module command as a string")
       (geiser-repl--read-impl prompt)))
 
 
+;;; Prompt &co.
+
+(defun geiser-repl--last-prompt-end ()
+  (cond ((and (boundp 'comint-last-prompt) (markerp (cdr comint-last-prompt)))
+         (marker-position (cdr comint-last-prompt)))
+        ((and (boundp 'comint-last-prompt-overlay) comint-last-prompt-overlay)
+         (overlay-end comint-last-prompt-overlay))
+        (t (save-excursion (geiser-repl--bol) (point)))))
+
+(defun geiser-repl--last-prompt-start ()
+  (cond ((and (boundp 'comint-last-prompt) (markerp (car comint-last-prompt)))
+         (marker-position (car comint-last-prompt)))
+        ((and (boundp 'comint-last-prompt-overlay) comint-last-prompt-overlay)
+         (overlay-start comint-last-prompt-overlay))
+        (t (save-excursion (geiser-repl--bol) (point)))))
+
+
 ;;; REPL connections
 
 (make-variable-buffer-local
@@ -306,8 +340,16 @@ module command as a string")
                         txt)
     (geiser-autodoc--disinhibit-autodoc)))
 
+(defun geiser-repl--check-version (impl)
+  (when (not geiser-repl-skip-version-check-p)
+    (let ((v (geiser-repl--version impl (geiser-repl--binary impl)))
+          (r (geiser-repl--min-version impl)))
+      (when (geiser--version< v r)
+        (error "Geiser requires %s version %s but detected %s" impl r v)))))
+
 (defun geiser-repl--start-repl (impl address)
   (message "Starting Geiser REPL for %s ..." impl)
+  (when (not address) (geiser-repl--check-version impl))
   (geiser-repl--to-repl-buffer impl)
   (sit-for 0)
   (goto-char (point-max))
@@ -369,12 +411,9 @@ module command as a string")
 (defun geiser-repl--is-debugging ()
   (let ((dp (geiser-con--connection-debug-prompt geiser-repl--connection)))
     (and dp
-         comint-last-prompt-overlay
          (save-excursion
-           (goto-char (overlay-start comint-last-prompt-overlay))
-           (re-search-forward dp
-                              (overlay-end comint-last-prompt-overlay)
-                              t)))))
+           (goto-char (geiser-repl--last-prompt-start))
+           (re-search-forward dp (geiser-repl--last-prompt-end) t)))))
 
 (defun geiser-repl--connection* ()
   (let ((buffer (geiser-repl--set-up-repl geiser-impl--implementation)))
@@ -489,8 +528,7 @@ module command as a string")
 
 (defun geiser-repl--beginning-of-defun ()
   (save-restriction
-    (when comint-last-prompt-overlay
-      (narrow-to-region (overlay-end comint-last-prompt-overlay) (point)))
+    (narrow-to-region (geiser-repl--last-prompt-end) (point))
     (let ((beginning-of-defun-function nil))
       (beginning-of-defun))))
 
@@ -511,16 +549,6 @@ module command as a string")
     (narrow-to-region comint-last-input-start (point-max))
     (insert "\n")
     (lisp-indent-line)))
-
-(defun geiser-repl--last-prompt-end ()
-  (if comint-last-prompt-overlay
-      (overlay-end comint-last-prompt-overlay)
-    (save-excursion (geiser-repl--bol) (point))))
-
-(defun geiser-repl--last-prompt-start ()
-  (if comint-last-prompt-overlay
-      (overlay-start comint-last-prompt-overlay)
-    (save-excursion (geiser-repl--bol) (point))))
 
 (defun geiser-repl--nesting-level ()
   (save-restriction
@@ -603,6 +631,7 @@ buffer."
   (set (make-local-variable 'comint-use-prompt-regexp) t)
   (set (make-local-variable 'comint-prompt-read-only)
        geiser-repl-read-only-prompt-p)
+  (setq comint-process-echoes nil)
   (set (make-local-variable 'beginning-of-defun-function)
        'geiser-repl--beginning-of-defun)
   (set (make-local-variable 'comint-input-ignoredups)

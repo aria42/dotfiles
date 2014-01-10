@@ -41,7 +41,8 @@
       erc-prompt-for-password nil)
 ;; autojoin channels
 (setq erc-autojoin-channels-alist
-      '(("freenode.net" "#marksy")))
+      '(("freenode.net" "#marksy")
+        ("freenode.net" "#coderdojonyc")))
 
 ;; logging settings
 (setq erc-enable-logging t
