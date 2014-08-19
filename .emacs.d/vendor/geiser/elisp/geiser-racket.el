@@ -61,8 +61,7 @@ This executable is used by `run-gracket', and, if
   :group 'geiser-racket)
 
 (geiser-custom--defcustom geiser-racket-extra-keywords
-    '("define-syntax-rule" "provide" "require"
-      "unless" "when" "with-handlers")
+    '("provide" "require" "unless" "when" "with-handlers")
   "Extra keywords highlighted in Racket buffers."
   :type '(repeat string)
   :group 'geiser-racket)
@@ -252,10 +251,10 @@ using start-geiser, a procedure in the geiser/server module."
         (mapc 'geiser-edit--buttonize-files geiser-racket--file-rxs)
         (goto-char end)
         (newline))))
-  (or key (not (zerop (length msg)))))
+  (if (and msg (string-match "\\(.+\\)$" msg)) (match-string 1 msg) key))
 
 
-;;; Trying to ascertain whether a buffer is mzscheme scheme:
+;;; Trying to ascertain whether a buffer is racket code:
 
 (defun geiser-racket--guess ()
   (or (save-excursion
@@ -276,7 +275,8 @@ using start-geiser, a procedure in the geiser/server module."
 (defun geiser-racket--keywords ()
   (append geiser-racket-font-lock-forms
           (when geiser-racket-extra-keywords
-            `((,(format "[[(]%s\\>" (regexp-opt geiser-racket-extra-keywords 1))
+            `((,(format "[[(]%s\\>"
+                        (regexp-opt geiser-racket-extra-keywords 1))
                . 1)))))
 
 (geiser-syntax--scheme-indent

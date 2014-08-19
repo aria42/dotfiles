@@ -1,3 +1,4 @@
+*.dat
 *.elc
 *.tar
 *.tar.gz
@@ -5,3 +6,4 @@
 README.html
 doc/*.html
 /auto-complete-*/
+/.cask/

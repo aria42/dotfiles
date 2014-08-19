@@ -1,6 +1,6 @@
 ;;; enter.rkt -- custom module loaders
 
-;; Copyright (C) 2010, 2012, 2013 Jose Antonio Ortega Ruiz
+;; Copyright (C) 2010, 2012, 2013, 2014 Jose Antonio Ortega Ruiz
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the Modified BSD License. You should
@@ -33,9 +33,7 @@
       (resolved-module-path-name rp))))
 
 (define (visit-module mod)
-  (parameterize ([current-load/use-compiled
-                  (make-loader (current-load/use-compiled) #f)])
-    (dynamic-require mod #f))
+  (dynamic-require mod #f)
   (check-latest mod))
 
 (define (module-loader orig)
@@ -94,7 +92,7 @@
                    "compiled"
                    (lambda (e)
                      (parameterize ([compile-enforce-module-constants #f])
-                       (compile e)))
+                       (compile-syntax e)))
                    (lambda (ext loader?) (load-extension ext) #f)
                    #:notify (lambda (chosen) (notify re? chosen))))
 
@@ -154,4 +152,4 @@
                             (make-loader orig #f)]
                            [current-module-declare-name rindex]
                            [current-module-declare-source actual-path])
-              ((make-loader orig #t) npath (mod-name mod)))))))))
+              ((make-loader orig #f) npath (mod-name mod)))))))))

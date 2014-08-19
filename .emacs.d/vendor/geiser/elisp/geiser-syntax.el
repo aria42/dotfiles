@@ -1,6 +1,6 @@
 ;;; geiser-syntax.el -- utilities for parsing scheme syntax
 
-;; Copyright (C) 2009, 2010, 2011, 2012, 2013 Jose Antonio Ortega Ruiz
+;; Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014 Jose Antonio Ortega Ruiz
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the Modified BSD License. You should
@@ -52,8 +52,13 @@
 
 ;;; Extra syntax keywords
 (defconst geiser-syntax--keywords
-  '(("\\[\\(else\\)\\>" . 1)
-    ("(\\(parameterize\\)\\>" . 1)))
+  `(("\\[\\(else\\)\\>" . 1)
+    ("(\\(parameterize\\)\\>" . 1)
+    (,(rx "(" (group "define-syntax-rule") eow (* space)
+          (? "(") (? (group (1+ word))))
+      (1 font-lock-keyword-face)
+      (2 font-lock-function-name-face nil t))
+    (,(rx "(" (group "when") eow) . 1)))
 
 (font-lock-add-keywords 'scheme-mode geiser-syntax--keywords)
 

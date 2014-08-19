@@ -27,3 +27,5 @@ projectile-bookmarks.eld
 session*
 *logs*
 .cask
+tramp
+/var/pcache

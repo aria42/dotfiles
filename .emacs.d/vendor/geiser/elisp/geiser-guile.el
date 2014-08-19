@@ -248,9 +248,13 @@ This function uses `geiser-guile-init-file' if it exists."
 ;;; Keywords and syntax
 
 (defun geiser-guile--keywords ()
-  (when geiser-guile-extra-keywords
-    `((,(format "[[(]%s\\>" (regexp-opt geiser-guile-extra-keywords 1))
-       . 1))))
+  (append
+   (when geiser-guile-extra-keywords
+     `((,(format "[[(]%s\\>" (regexp-opt geiser-guile-extra-keywords 1))
+         . 1)))
+   `((,(rx "(" (group "define-once") eow (* space) (? (group (+ word))))
+       (1 font-lock-keyword-face)
+       (2 font-lock-variable-name-face nil t)))))
 
 (geiser-syntax--scheme-indent
  (c-declare 0)
@@ -261,7 +265,8 @@ This function uses `geiser-guile-init-file' if it exists."
  (with-fluid* 1)
  (with-fluids 1)
  (with-fluids* 1)
- (with-method 1))
+ (with-method 1)
+ (with-mutex 1))
 
 
 

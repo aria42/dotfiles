@@ -10,11 +10,6 @@
           '(lambda ()
              (setq js-indent-level 2)))
 
-;;(add-hook 'python-mode-hook
-;;          'flymake-python-pyflakes-load
-;;          '(lambda ()
-;;             (setq flymake-number-of-errors-to-display nil)))
-
 (setq js2-mode-hook
       '(lambda () ((progn)
                 (setq js2-missing-semi-one-line-override t)
@@ -36,3 +31,19 @@
 
 (add-hook 'processing-mode-hook 'processing-mode-init)
 
+(add-hook 'clojure-mode-hook (lambda ()
+                               (clj-refactor-mode 1)
+                               ;; insert keybinding setup here
+                               (cljr-add-keybindings-with-prefix "C-c C-f")))
+
+(add-hook 'scheme-mode-hook 'balanced-on)
+
+(add-hook 'org-present-mode-hook
+          (lambda ()
+            (org-present-big)
+            (org-display-inline-images)))
+
+(add-hook 'org-present-mode-quit-hook
+          (lambda ()
+            (org-present-small)
+            (org-remove-inline-images)))

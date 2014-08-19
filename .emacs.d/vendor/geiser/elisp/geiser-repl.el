@@ -327,10 +327,14 @@ module command as a string")
 
 (defun geiser-repl--save-remote-data (address)
   (setq geiser-repl--address address)
-  (setq header-line-format (and address
-                                (format "Host: %s   Port: %s"
-                                        (geiser-repl--host)
-                                        (geiser-repl--port)))))
+  (setq header-line-format
+	(cond ((consp address)
+	       (format "Host: %s   Port: %s"
+		       (geiser-repl--host)
+		       (geiser-repl--port)))
+	      ((stringp address)
+	       (format "Socket: %s" address))
+	      (t nil))))
 
 (defun geiser-repl--output-filter (txt)
   (geiser-con--connection-update-debugging geiser-repl--connection txt)
@@ -384,10 +388,18 @@ module command as a string")
   (setq comint-prompt-regexp prompt)
   (let* ((name (geiser-repl--repl-name impl))
          (buff (current-buffer))
-         (args (if address (list address)
-                 `(,(geiser-repl--binary impl)
-                   nil
-                   ,@(geiser-repl--arglist impl)))))
+         (args (cond ((consp address) (list address))
+		     ((stringp address) '(()))
+		     (t `(,(geiser-repl--binary impl)
+			  nil
+			  ,@(geiser-repl--arglist impl))))))
+    (when (and address (stringp address))
+      ;; Connect over a Unix-domain socket.
+      (make-network-process :name (buffer-name buff)
+			    :buffer buff
+			    :family 'local
+			    :remote address))
+
     (condition-case err
         (apply 'make-comint-in-buffer `(,name ,buff ,@args))
       (error (insert "Unable to start REPL:\n"
@@ -439,6 +451,11 @@ module command as a string")
     (insert cmd)
     (let ((comint-input-filter (lambda (x) nil)))
       (comint-send-input nil t))))
+
+(defun geiser-repl-interrupt ()
+  (interactive)
+  (when (get-buffer-process (current-buffer))
+    (interrupt-process nil comint-ptyp)))
 
 
 ;;; REPL history
@@ -673,6 +690,9 @@ buffer."
   ("Previous input" "\C-c\M-p" comint-previous-input)
   ("Next input" "\C-c\M-n" comint-next-input)
   --
+  ("Interrupt evaluation" ("\C-c\C-k" "\C-c\C-c" "\C-ck")
+   geiser-repl-interrupt)
+  --
   (mode "Autodoc mode" ("\C-c\C-da" "\C-c\C-d\C-a") geiser-autodoc-mode)
   ("Symbol documentation" ("\C-c\C-dd" "\C-c\C-d\C-d")
    geiser-doc-symbol-at-point
@@ -713,6 +733,16 @@ buffer."
   (let ((buffer (current-buffer)))
     (geiser-repl--start-repl impl
                              (geiser-repl--read-address host port))
+    (geiser-repl--maybe-remember-scm-buffer buffer)))
+
+(defun geiser-connect-local (impl &optional socket)
+  "Start a new Geiser REPL connected to a remote Scheme process
+over a Unix-domain socket."
+  (interactive
+   (list (geiser-repl--get-impl "Connect to Scheme implementation: ")))
+  (let ((buffer (current-buffer)))
+    (geiser-repl--start-repl impl
+                             (read-file-name "Socket file name: "))
     (geiser-repl--maybe-remember-scm-buffer buffer)))
 
 (make-variable-buffer-local

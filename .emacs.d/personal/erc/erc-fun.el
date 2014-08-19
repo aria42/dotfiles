@@ -1,5 +1,3 @@
-;;; much taken from https://github.com/bigclean/dotfiles/blob/0ad07f993bcc18b29f8d98380df774a026284744/.emacs.d/conf/bigclean-erc.el
-
 (setq erc-nick "zeeshanlakhani")
 (setq erc-away-name "zeeshanlakhani_away")
 (setq erc-user-full-name "Zeeshan Lakhani")
@@ -31,18 +29,48 @@
 ;; don't track server buffer
 (setq erc-track-exclude-server-buffer t)
 ;; Don't track join/quit
-(setq erc-track-exclude-types '("NICK" "333" "353" "JOIN" "PART" "QUIT"))
+(setq erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE"
+                                "324" "329" "332" "333" "353" "477"))
 (setq erc-server-coding-system 'utf-8)
 
-(setq erc-server "irc.freenode.net"
-      erc-port 6667
-      erc-nick "zeeshanlakhani"
-      erc-user-full-name "Zeeshan Lakhani"
-      erc-prompt-for-password nil)
-;; autojoin channels
-(setq erc-autojoin-channels-alist
-      '(("freenode.net" "#marksy")
-        ("freenode.net" "#coderdojonyc")))
+(defmacro asf-erc-bouncer-connect (command server port nick ssl pass)
+     "Create interactive command `command', for connecting to an IRC server. The
+   command uses interactive mode if passed an argument."
+     (fset command
+           `(lambda (arg)
+              (interactive "p")
+              (if (not (= 1 arg))
+                  (call-interactively 'erc)
+                (let ((erc-connect-function ',(if ssl
+                                                  'erc-open-ssl-stream
+                                                'open-network-stream)))
+                  (erc :server ,server :port ,port :nick ,nick :password ,pass))))))
+
+;; Create ERC command to connect to Freenode servers
+(asf-erc-bouncer-connect erc-freenode "irc.freenode.net" 6667 "zeeshanlakhani" nil "zeeshanlakhani")
+
+(defmacro erc-autojoin (&rest args)
+  `(add-hook 'erc-after-connect
+             '(lambda (server nick)
+                (cond
+                 ,@(mapcar (lambda (servers+channels)
+                             (let ((servers (car servers+channels))
+                                   (channels (cdr servers+channels)))
+                               `((member erc-session-server ',servers)
+                                 (mapc 'erc-join-channel ',channels))))
+                              args)))))
+
+
+(setq erc-prompt-for-nickserv-password nil)
+(setq erc-server-auto-reconnect t
+      erc-server-reconnect-timeout 20
+      erc-server-reconnect-attempts 3)
+
+;; Truncate buffers so they don't hog core.
+(setq erc-max-buffer-size 20000)
+(defvar erc-insert-post-hook)
+(add-hook 'erc-insert-post-hook 'erc-truncate-buffer)
+(setq erc-truncate-buffer-on-save t)
 
 ;; logging settings
 (setq erc-enable-logging t
@@ -50,3 +78,11 @@
       erc-log-channels-directory  "~/.emacs.d/personal/erc/logs"
       erc-save-buffer-on-part t ; logs automatically written when you part or quit a channel
       erc-log-file-coding-system 'utf-8)
+
+(erc-autojoin
+ (("irc.freenode.net") "#marksy" "#raptracks" "#clojure" "#paperswelove"))
+
+(defun kyle-connect ()
+  (interactive)
+  (erc-tls :server "irc.tyrfingr.is" :port 6697 :nick "zeeshanlakhani" :password nil)
+  (erc-join-channel "#tyrfingr"))
