@@ -1,4 +1,3 @@
 setup.sh
-flycheck-custom.el
-.projectile
-*logs*
+.emacs.d/recentf
+.emacs.d/session*

@@ -1,5 +1,0 @@
-# name: method decleration
-# key: methd
-# --
-- (${1:void}) $2;
-$0

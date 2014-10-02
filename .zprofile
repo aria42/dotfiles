@@ -1,0 +1,1 @@
+/home/zeeshanlakhani/.zprezto/runcoms/zprofile
