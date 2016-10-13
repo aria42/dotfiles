@@ -19,7 +19,7 @@
  changed = green
  untracked = cyan
 [core]
- editor = /usr/local/bin/mg
+ editor = /usr/bin/mg
  excludesfile = /Users/zeeshanlakhani/.gitignore_global
  autocrlf = input
 [alias]
