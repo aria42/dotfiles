@@ -31,7 +31,7 @@ export HISTFILE=~/.zsh_history
 # COMPLETION_WAITING_DOTS="true"
 
 # exports and sets
-export PATH=/usr/local/bin:/usr/local:/usr/local/sbin:~/.erln8.d/bin:~/Library/Haskell/bin:~/.cabal/bin:~/julia:/usr/local/share/npm/bin:/Applications/Racket/bin:/usr/local/Cellar/smlnj/110.75/libexec/bin:~/bin:~/Applications/chromedriver:/usr/bin:/bin:/usr/sbin:/sbin:/mono64/bin:/Applications/Postgres93.app/Contents/MacOS/bin:~/riak_test/utils/riak_test.zsh:/usr/texbin:~/.jenv/bin:~/lfe/bin:~/kjell:~/erlang/libs/cuter:/opt/X11/bin:~/$PATH
+export PATH=~/.local/bin:/usr/local/bin:/usr/local:/usr/local/sbin:~/.erln8.d/bin:~/Library/Haskell/bin:~/.cabal/bin:~/julia:/usr/local/share/npm/bin:/Applications/Racket/bin:/usr/local/Cellar/smlnj/110.75/libexec/bin:~/bin:~/Applications/chromedriver:/usr/bin:/bin:/usr/sbin:/sbin:/mono64/bin:/Applications/Postgres.app/Contents/Versions/latest/bin:~/riak_test/utils/riak_test.zsh:/usr/texbin:~/.jenv/bin:~/lfe/bin:~/kjell:~/erlang/libs/cuter:/opt/X11/bin:~/$PATH
 export PYTHONPATH="/usr/local/lib/python3/site-packages:$PYTHONPATH"
 FC=/usr/local/bin/gfortran
 TERM=xterm-256color
@@ -43,23 +43,15 @@ export GTAGSLABEL=ctags
 # extra path exports
 export PATH="$HOME/.rbenv/bin:$PATH"
 
-##
-# sources
-##
-
-# source "$(which virtualenvwrapper.sh)"
-
 # sugesstions
-source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-
 ## for mac
 ## source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # other sources
 if [ -f ~/.localrc/.zsh_aliases ]; then
     source ~/.localrc/.zsh_aliases
 fi
-
 
 # aliases
 alias git-root='cd $(git rev-parse --show-toplevel)'
@@ -67,6 +59,13 @@ alias gfz='git fetch'
 alias gs='git status'
 alias ppj='python -m json.tool'
 alias sml='rlwrap sml'
+alias elcpurge='find ~/.emacs.d -name "*.elc" -print | xargs rm -f'
+alias elpapurge='rm -Rf ~/.emacs.d/elpa/*'
+alias readlink=greadlink
+alias cabalupgrades="cabal list --installed  | egrep -iv '(synopsis|homepage|license)'"
+alias py='python3'
+alias gcc='gcc-6'
+alias mg='mg -n'
 
 ## for mac-emacs
 # alias emacsd='/Applications/Emacs.app/Contents/MacOS/Emacs --daemon'
@@ -81,13 +80,6 @@ alias em='/usr/bin/emacsclient --no-wait'
 alias emn='/usr/bin/emacsclient -c --no-wait'
 alias emacs='/usr/bin/emacs'
 alias killem='pkill -TERM -u $USER emacs'
-
-alias elcpurge='find ~/.emacs.d -name "*.elc" -print | xargs rm -f'
-alias elpapurge='rm -Rf ~/.emacs.d/elpa/*'
-alias cabalupgrades="cabal list --installed  | egrep -iv '(synopsis|homepage|license)'"
-alias py='python3'
-alias gcc='gcc-6'
-alias mg='mg -n'
 
 # functions
 skill () {
@@ -156,3 +148,12 @@ fi
 
 # fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# elixir verision mgr
+test -s "$HOME/.kiex/scripts/kiex" && source "$HOME/.kiex/scripts/kiex"
+
+# source virutalenwrapper
+source /usr/local/bin/virtualenvwrapper.sh
+
+# pdflatex
+export PATH="/Library/TeX/texbin:$PATH"

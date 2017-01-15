@@ -4,6 +4,23 @@
 (setq indent-line-function 'insert-tab)
 (setq c-basic-offset 4)
 
+;; javascript/web indent
+
+(push "~/.emacs.d/local/prettier/editors/emacs/" load-path)
+(require 'prettier-js)
+
+(defun setup-indent (n)
+  (setq-default coffee-tab-width n)       ; coffeescript
+  (setq-default javascript-indent-level n) ; javascript-mode
+  (setq-default js-indent-level n) ; js-mode
+  (setq-default js2-basic-offset n) ; js2-mode, in latest js2-mode, it's alias of js-indent-level
+  (setq-default web-mode-markup-indent-offset n) ; web-mode, html tag in html file
+  (setq-default web-mode-css-indent-offset n) ; web-mode, css in html file
+  (setq-default web-mode-code-indent-offset n) ; web-mode, js code in html file
+  (setq-default css-indent-offset n) ; css-mode
+  )
+(setup-indent 2)
+
 ;; eletric indentation and RET
 (electric-indent-mode +1)
 (global-set-key (kbd "RET") 'newline-and-indent)

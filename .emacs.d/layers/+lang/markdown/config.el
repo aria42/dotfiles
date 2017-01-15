@@ -15,3 +15,5 @@
 
 (defvar markdown-live-preview-engine 'eww
   "Possibe values are `eww' (built-in browser) or `vmd' (installed with `npm').")
+
+(setq markdown-command "~/.emacs.d/local/markdown+/flavor")

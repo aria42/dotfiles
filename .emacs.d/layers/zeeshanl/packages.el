@@ -1,5 +1,11 @@
 (setq zeeshanl-packages '((pretty-mode :location elpa)
-                          (paredit :location elpa)))
+                          (paredit :location elpa)
+                          (prettier :location local)))
+
+(defun zeeshanl/init-prettier ()
+  (use-package prettier
+    :defer t
+    :config (message "Loaded Prettier")))
 
 (defun zeeshanl/init-pretty-mode ()
   (use-package pretty-mode

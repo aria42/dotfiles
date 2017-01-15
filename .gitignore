@@ -1,3 +1,4 @@
 setup.sh
 .emacs.d/recentf
 .emacs.d/session*
+.emacs.d/.cache

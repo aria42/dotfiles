@@ -1,0 +1,4 @@
+code:add_patha("/Users/zeeshanlakhani/erlang/lib/eper/ebin").
+code:add_patha("/Users/zeeshanlakhani/erlang/lib/exrun/_build/dev/lib/exrun/ebin").
+code:add_patha("/Users/zeeshanlakhani/erlang/lib/dbg/_build/dev/lib/dbg/ebin").
+

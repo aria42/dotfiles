@@ -19,10 +19,10 @@
 
 (spacemacs|define-jump-handlers haskell-mode haskell-mode-jump-to-def-or-tag)
 
-(defvar haskell-completion-backend 'ghci
+(defvar haskell-completion-backend 'ghc-mod
   "Completion backend used by company.
 Available options are `ghci', `intero' and `ghc-mod'. Default is
 `ghci'.")
 
-(defvar haskell-enable-hindent-style nil
+(defvar haskell-enable-hindent-style 'chris-done
   "Style to use for formatting with hindent; available are: fundamental johan-tibell chris-done gibiansky. If nil hindent is disabled.")

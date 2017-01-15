@@ -93,7 +93,12 @@
     (progn
       (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
       ;; Required to make imenu functions work correctly
-      (add-hook 'js2-mode-hook 'js2-imenu-extras-mode))
+      (add-hook 'js2-mode-hook 'js2-imenu-extras-mode)
+
+      ;; js2-hook for prettier-js
+      (add-hook 'js2-mode-hook
+                (lambda ()
+                  (add-hook 'before-save-hook 'jscodefmt-before-save))))
     :config
     (progn
       (spacemacs/declare-prefix-for-mode 'js2-mode "mh" "documentation")
@@ -260,6 +265,8 @@
         (skewer-repl)
         (evil-insert-state))
 
+      (spacemacs/declare-prefix-for-mode 'js2-mode "ms" "skewer")
+      (spacemacs/declare-prefix-for-mode 'js2-mode "me" "eval")
       (spacemacs/set-leader-keys-for-major-mode 'js2-mode
         "'" 'spacemacs/skewer-start-repl
         "ee" 'skewer-eval-last-expression

@@ -14,11 +14,11 @@
 ;; We never want to edit Erlang .beam files
 (add-to-list 'completion-ignored-extensions ".beam")
 
-(setq erlang-flymake-command "/usr/lib/erlang/bin/erlc")
+(setq erlang-flymake-command "/usr/local/lib/erlang/bin/erlc")
 
-(setq erlang-root-dir "/usr/lib/erlang")
-(setq load-path (cons "/usr/lib/erlang/lib/tools-2.8.6/emacs" load-path))
-(setq exec-path (cons "/usr/lib/erlang/bin" exec-path))
+(setq erlang-root-dir "/usr/local/lib/erlang")
+(setq load-path (cons "/usr/local/lib/erlang/lib/tools-2.9/emacs" load-path))
+(setq exec-path (cons "/usr/local/lib/erlang/bin" exec-path))
 (require 'erlang-start)
 
 (add-hook 'erlang-mode-hook 'whitespace-mode)
@@ -38,9 +38,9 @@
 ;;; distel -> brought in from wrangler
 ;;;----------------------------------------
 
-;; (push "~/.emacs.d/local/distel/elisp/" load-path)
-;; (require 'distel)
-;; (distel-setup)
+;;(push "~/.emacs.d/local/distel/elisp/" load-path)
+;;(require 'distel)
+;;(distel-setup)
 
 ;; prevent annoying hang-on-compile
 (defvar inferior-erlang-prompt-timeout t)
@@ -185,9 +185,9 @@
 ;; Erlang Emacs Mode -- Configuration End
 
 ;; EQC Emacs Mode -- Configuration Start
-(add-to-list 'load-path "~/erlang/lib/qc_1.38.3/eqc-1.38.3/emacs/")
+(add-to-list 'load-path "~/erlang/lib/eqc/eqc-1.39.2/emacs")
 (autoload 'eqc-erlang-mode-hook "eqc-ext" "EQC Mode" t)
 (add-hook 'erlang-mode-hook 'eqc-erlang-mode-hook)
 (setq eqc-max-menu-length 30)
-(setq eqc-root-dir "~/erlang/lib/qc_1.38.3/eqc-1.38.3")
+(setq eqc-root-dir "~/erlang/lib/eqc/eqc-1.39.2")
 ;; EQC Emacs Mode -- Configuration End
